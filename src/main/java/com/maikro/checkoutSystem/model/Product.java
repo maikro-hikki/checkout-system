@@ -25,9 +25,6 @@ public class Product {
 	//price of one unit
 	private double unitPrice;
 	
-	//quantity of product
-	private int quantity;
-	
 	//type of product
 	private ProductType productType;
 
@@ -47,13 +44,12 @@ public class Product {
 	public Product() {
 	}
 
-	public Product(String name, double unitPrice, int quantity, ProductType productType,
+	public Product(String name, double unitPrice, ProductType productType,
 			List<Inventory> inventory, List<ProductCategory> productCategory, List<ProductDiscount> productDiscount,
 			Admin admin) {
 		super();
 		this.name = name;
 		this.unitPrice = unitPrice;
-		this.quantity = quantity;
 		this.productType = productType;
 		this.inventory = inventory;
 		this.productCategory = productCategory;
@@ -79,14 +75,6 @@ public class Product {
 
 	public void setUnitPrice(double unitPrice) {
 		this.unitPrice = unitPrice;
-	}
-
-	public int getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
 	}
 
 	public ProductType getProductType() {
