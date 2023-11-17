@@ -10,7 +10,7 @@ import jakarta.persistence.InheritanceType;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class User {
+public abstract class UserClass {
 	
 	@Id
 	@GeneratedValue
@@ -26,10 +26,10 @@ public abstract class User {
 	
 	private UserType userType;
 	
-	public User() {
+	public UserClass() {
 	}
 
-	public User(long userId, String username, String password, UserType userType) {
+	public UserClass(long userId, String username, String password, UserType userType) {
 		this.userId = userId;
 		this.username = username;
 		this.password = password;

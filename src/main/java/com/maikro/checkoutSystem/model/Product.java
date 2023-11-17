@@ -5,10 +5,9 @@ import java.util.List;
 import com.maikro.checkoutSystem.constants.ProductType;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 @Entity
@@ -29,26 +28,35 @@ public class Product {
 	
 	//type of product
 	private ProductType productType;
+
+	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+	private List<Inventory> inventory;
 	
-	//discounts set on the product
+	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+	private List<ProductCategory> productCategory;
+	
+	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<ProductDiscount> productDiscount;
+	
 	@OneToMany(mappedBy = "product")
-	private List<Discount> discounts;
-	
-	@ManyToOne
-    @JoinColumn(name = "admin_id")
-    private Admin admin;
-	
-	@ManyToOne
-    @JoinColumn(name = "basket_id")
-    private Basket basket;
+	private List<AdminProduct> adminProduct;
 
 	public Product() {
 	}
 
-	public Product(long productId, ProductType productType, List<Discount> discounts) {
+	public Product(long productId, String name, double unitPrice, int quantity, ProductType productType,
+			List<Inventory> inventory, List<ProductCategory> productCategory, List<ProductDiscount> productDiscount,
+			List<AdminProduct> adminProduct) {
+		super();
 		this.productId = productId;
+		this.name = name;
+		this.unitPrice = unitPrice;
+		this.quantity = quantity;
 		this.productType = productType;
-		this.discounts = discounts;
+		this.inventory = inventory;
+		this.productCategory = productCategory;
+		this.productDiscount = productDiscount;
+		this.adminProduct = adminProduct;
 	}
 
 	public long getProductId() {
@@ -67,8 +75,8 @@ public class Product {
 		return unitPrice;
 	}
 
-	public void setUnitPrice(double price) {
-		this.unitPrice = price;
+	public void setUnitPrice(double unitPrice) {
+		this.unitPrice = unitPrice;
 	}
 
 	public int getQuantity() {
@@ -87,12 +95,36 @@ public class Product {
 		this.productType = productType;
 	}
 
-	public List<Discount> getDiscounts() {
-		return discounts;
+	public List<Inventory> getInventory() {
+		return inventory;
 	}
 
-	public void setDiscounts(List<Discount> discounts) {
-		this.discounts = discounts;
-	}	
+	public void setInventory(List<Inventory> inventory) {
+		this.inventory = inventory;
+	}
+
+	public List<ProductCategory> getProductCategory() {
+		return productCategory;
+	}
+
+	public void setProductCategory(List<ProductCategory> productCategory) {
+		this.productCategory = productCategory;
+	}
+
+	public List<ProductDiscount> getProductDiscount() {
+		return productDiscount;
+	}
+
+	public void setProductDiscount(List<ProductDiscount> productDiscount) {
+		this.productDiscount = productDiscount;
+	}
+
+	public List<AdminProduct> getAdminProduct() {
+		return adminProduct;
+	}
+
+	public void setAdminProduct(List<AdminProduct> adminProduct) {
+		this.adminProduct = adminProduct;
+	}
 
 }

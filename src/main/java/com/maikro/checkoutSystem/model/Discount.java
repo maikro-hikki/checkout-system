@@ -1,46 +1,70 @@
 package com.maikro.checkoutSystem.model;
 
+import java.util.List;
+
+import com.maikro.checkoutSystem.constants.DiscountType;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
-public class Discount {
+public abstract class Discount {
 	
 	@Id
 	@GeneratedValue
 	private long discountId;
 	
-	private long discountAmount;
+	private DiscountType discountType;
 	
-	@ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "userId")
+	private Admin admin;
 	
-	@ManyToOne
-    @JoinColumn(name = "admin_id")
-    private Admin admin;
+	@OneToMany(mappedBy = "discount", fetch = FetchType.LAZY)
+    private List<ProductDiscount> productDiscount;
 
 	public Discount() {
 	}
 
-	public Discount(long discountId, long discountAmount) {
+	public Discount(long discountId, DiscountType discountType, Admin admin, List<ProductDiscount> productDiscount) {
+		super();
 		this.discountId = discountId;
-		this.discountAmount = discountAmount;
+		this.discountType = discountType;
+		this.admin = admin;
+		this.productDiscount = productDiscount;
 	}
 
 	public long getDiscountId() {
 		return discountId;
 	}
 
-	public long getDiscountAmount() {
-		return discountAmount;
+	public DiscountType getDiscountType() {
+		return discountType;
 	}
 
-	public void setDiscountAmount(long discountAmount) {
-		this.discountAmount = discountAmount;
+	public void setDiscountType(DiscountType discountType) {
+		this.discountType = discountType;
+	}
+
+	public Admin getAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(Admin admin) {
+		this.admin = admin;
+	}
+
+	public List<ProductDiscount> getProductDiscount() {
+		return productDiscount;
+	}
+
+	public void setProductDiscount(List<ProductDiscount> productDiscount) {
+		this.productDiscount = productDiscount;
 	}
 	
 }

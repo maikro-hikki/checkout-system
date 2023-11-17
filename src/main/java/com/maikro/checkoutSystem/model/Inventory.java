@@ -7,34 +7,43 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 
 @Entity
-public class Basket {
+public class Inventory {
 	
 	@Id
 	@GeneratedValue
-	private long basketId;
+	private long inventoryId;
 	
-	@OneToOne
-	@JoinColumn(name = "fk_customerId", referencedColumnName = "userId")
-	private Customer customer;
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_productId")
+	private Product product;
 	
-	//products inside the basket
-	@OneToMany(mappedBy = "basket", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "inventory", fetch = FetchType.LAZY)
 	private List<BasketInventory> basketInventory;
 
-	public Basket() {
+	public Inventory() {
 	}
 
-	public Basket(long basketId, List<BasketInventory> basketInventory) {
-		this.basketId = basketId;
+	public Inventory(long inventoryId, Product product, List<BasketInventory> basketInventory) {
+		super();
+		this.inventoryId = inventoryId;
+		this.product = product;
 		this.basketInventory = basketInventory;
 	}
 
-	public long getBasketId() {
-		return basketId;
+	public long getInventoryId() {
+		return inventoryId;
+	}
+
+	public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
 	}
 
 	public List<BasketInventory> getBasketInventory() {

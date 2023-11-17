@@ -6,17 +6,19 @@ import com.maikro.checkoutSystem.constants.UserType;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 
 @Entity
-public class Admin extends User {
+@PrimaryKeyJoinColumn(name = "userId")
+public class Admin extends UserClass {
 	
 	//products added by the admin user
 	@OneToMany(mappedBy = "admin")
-	private List<Product> products;
+	private List<AdminProduct> adminProduct;
 	
 	//discounts added by the admin user
 	@OneToMany(mappedBy = "admin")
-	private List<Discount> discounts;
+	private List<Discount> discount;
 
 	public Admin() {
 		super();
@@ -26,26 +28,26 @@ public class Admin extends User {
 		super(userId, username, password, userType);
 	}
 
-	public Admin(List<Product> products, List<Discount> discounts) {
+	public Admin(List<AdminProduct> adminProduct, List<Discount> discount) {
 		super();
-		this.products = products;
-		this.discounts = discounts;
+		this.adminProduct = adminProduct;
+		this.discount = discount;
 	}
 
-	public List<Product> getProducts() {
-		return products;
+	public List<AdminProduct> getAdminProduct() {
+		return adminProduct;
 	}
 
-	public void setProducts(List<Product> products) {
-		this.products = products;
+	public void setAdminProduct(List<AdminProduct> adminProduct) {
+		this.adminProduct = adminProduct;
 	}
 
-	public List<Discount> getDiscounts() {
-		return discounts;
+	public List<Discount> getDiscount() {
+		return discount;
 	}
 
-	public void setDiscounts(List<Discount> discounts) {
-		this.discounts = discounts;
+	public void setDiscount(List<Discount> discount) {
+		this.discount = discount;
 	}
 
 }

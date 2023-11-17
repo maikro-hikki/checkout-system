@@ -3,11 +3,17 @@ package com.maikro.checkoutSystem.model;
 import com.maikro.checkoutSystem.constants.UserType;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 
 @Entity
-public class Customer extends User {
+@PrimaryKeyJoinColumn(name = "userId")
+public class Customer extends UserClass {
 	
 	//customer's shopping basket
+	@OneToOne
+	@JoinColumn(name = "fk_basketId", referencedColumnName = "basketId")
 	private Basket basket;
 
 	public Customer() {
