@@ -8,6 +8,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 @Entity
@@ -38,17 +40,17 @@ public class Product {
 	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<ProductDiscount> productDiscount;
 	
-	@OneToMany(mappedBy = "product")
-	private List<AdminProduct> adminProduct;
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "adminId")
+	private Admin admin;
 
 	public Product() {
 	}
 
-	public Product(long productId, String name, double unitPrice, int quantity, ProductType productType,
+	public Product(String name, double unitPrice, int quantity, ProductType productType,
 			List<Inventory> inventory, List<ProductCategory> productCategory, List<ProductDiscount> productDiscount,
-			List<AdminProduct> adminProduct) {
+			Admin admin) {
 		super();
-		this.productId = productId;
 		this.name = name;
 		this.unitPrice = unitPrice;
 		this.quantity = quantity;
@@ -56,7 +58,7 @@ public class Product {
 		this.inventory = inventory;
 		this.productCategory = productCategory;
 		this.productDiscount = productDiscount;
-		this.adminProduct = adminProduct;
+		this.admin = admin;
 	}
 
 	public long getProductId() {
@@ -119,12 +121,12 @@ public class Product {
 		this.productDiscount = productDiscount;
 	}
 
-	public List<AdminProduct> getAdminProduct() {
-		return adminProduct;
+	public Admin getAdmin() {
+		return admin;
 	}
 
-	public void setAdminProduct(List<AdminProduct> adminProduct) {
-		this.adminProduct = adminProduct;
+	public void setAdmin(Admin admin) {
+		this.admin = admin;
 	}
 
 }

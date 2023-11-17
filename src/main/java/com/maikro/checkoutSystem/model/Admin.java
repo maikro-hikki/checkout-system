@@ -14,7 +14,7 @@ public class Admin extends UserClass {
 	
 	//products added by the admin user
 	@OneToMany(mappedBy = "admin")
-	private List<AdminProduct> adminProduct;
+	private List<Product> products;
 	
 	//discounts added by the admin user
 	@OneToMany(mappedBy = "admin")
@@ -24,22 +24,16 @@ public class Admin extends UserClass {
 		super();
 	}
 
-	public Admin(long userId, String username, String password, UserType userType) {
-		super(userId, username, password, userType);
+	public Admin(String username, String password, String firstName, String lastName, UserType userType) {
+		super(username, password, firstName, lastName, userType);
 	}
 
-	public Admin(List<AdminProduct> adminProduct, List<Discount> discount) {
-		super();
-		this.adminProduct = adminProduct;
-		this.discount = discount;
+	public List<Product> getProducts() {
+		return products;
 	}
 
-	public List<AdminProduct> getAdminProduct() {
-		return adminProduct;
-	}
-
-	public void setAdminProduct(List<AdminProduct> adminProduct) {
-		this.adminProduct = adminProduct;
+	public void setProducts(List<Product> products) {
+		this.products = products;
 	}
 
 	public List<Discount> getDiscount() {

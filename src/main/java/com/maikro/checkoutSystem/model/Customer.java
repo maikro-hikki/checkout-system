@@ -20,8 +20,9 @@ public class Customer extends UserClass {
 		super();
 	}
 
-	public Customer(long userId, String username, String password, UserType userType) {
-		super(userId, username, password, userType);
+	public Customer(String username, String password, String firstName, String lastName, UserType userType) {
+		super(username, password, firstName, lastName, userType);
+		// TODO Auto-generated constructor stub
 	}
 
 	public Customer(Basket basket) {

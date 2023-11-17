@@ -25,14 +25,16 @@ public abstract class UserClass {
 	private String lastName;
 	
 	private UserType userType;
-	
+
 	public UserClass() {
 	}
 
-	public UserClass(long userId, String username, String password, UserType userType) {
-		this.userId = userId;
+	public UserClass(String username, String password, String firstName, String lastName, UserType userType) {
+		super();
 		this.username = username;
 		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
 		this.userType = userType;
 	}
 
