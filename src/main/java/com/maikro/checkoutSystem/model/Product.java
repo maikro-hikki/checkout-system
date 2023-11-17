@@ -38,7 +38,7 @@ public class Product {
     private List<ProductDiscount> productDiscount;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "adminId")
+    @JoinColumn(name = "fk_adminId")
 	private Admin admin;
 
 	public Product() {

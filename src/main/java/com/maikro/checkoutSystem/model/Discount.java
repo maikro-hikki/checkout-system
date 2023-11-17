@@ -22,7 +22,7 @@ public abstract class Discount {
 	private DiscountType discountType;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "userId")
+	@JoinColumn(name = "fk_adminId")
 	private Admin admin;
 	
 	@OneToMany(mappedBy = "discount", fetch = FetchType.LAZY)
