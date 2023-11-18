@@ -50,7 +50,7 @@ public class ProductServiceTest {
     	//create an admin to make a product
     	Admin admin = new Admin();
     	userClassService.addAdminUser(admin);
-    	// create a product and set it under the admin
+    	//create a product and set it under the admin
         Product product = new Product();
         product.setAdmin(admin);
         
