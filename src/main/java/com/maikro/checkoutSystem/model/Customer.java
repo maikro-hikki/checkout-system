@@ -1,10 +1,13 @@
 package com.maikro.checkoutSystem.model;
 
+import java.util.List;
+
 import com.maikro.checkoutSystem.constants.UserType;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 
 @Entity
@@ -12,9 +15,9 @@ import jakarta.persistence.PrimaryKeyJoinColumn;
 public class Customer extends UserClass {
 	
 	//customer's shopping basket
-	@OneToOne
-	@JoinColumn(name = "fk_basketId", referencedColumnName = "basketId")
-	private Basket basket;
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "fk_customerId")
+	private List<Basket> basket;
 
 	public Customer() {
 		super();
@@ -22,20 +25,19 @@ public class Customer extends UserClass {
 
 	public Customer(String username, String password, String firstName, String lastName, UserType userType) {
 		super(username, password, firstName, lastName, userType);
-		// TODO Auto-generated constructor stub
 	}
 
-	public Customer(Basket basket) {
+	public Customer(List<Basket> basketProduct) {
 		super();
-		this.basket = basket;
+		this.basket = basketProduct;
 	}
 
-	public Basket getBasket() {
+	public List<Basket> getBasketProduct() {
 		return basket;
 	}
 
-	public void setBasket(Basket basket) {
-		this.basket = basket;
+	public void setBasketProduct(List<Basket> basketProduct) {
+		this.basket = basketProduct;
 	}
 
 }

@@ -25,14 +25,11 @@ public class Product {
 	//price of one unit
 	private double unitPrice;
 	
+	//quantity of product remaining
+	private int remainingQuantity;
+	
 	//type of product
 	private ProductType productType;
-
-	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
-	private List<Inventory> inventory;
-	
-	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
-	private List<ProductCategory> productCategory;
 	
 	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<ProductDiscount> productDiscount;
@@ -44,15 +41,12 @@ public class Product {
 	public Product() {
 	}
 
-	public Product(String name, double unitPrice, ProductType productType,
-			List<Inventory> inventory, List<ProductCategory> productCategory, List<ProductDiscount> productDiscount,
-			Admin admin) {
-		super();
+	public Product(String name, double unitPrice, int remainingQuantity, ProductType productType,
+			List<ProductDiscount> productDiscount, Admin admin) {
 		this.name = name;
 		this.unitPrice = unitPrice;
+		this.remainingQuantity = remainingQuantity;
 		this.productType = productType;
-		this.inventory = inventory;
-		this.productCategory = productCategory;
 		this.productDiscount = productDiscount;
 		this.admin = admin;
 	}
@@ -77,28 +71,20 @@ public class Product {
 		this.unitPrice = unitPrice;
 	}
 
+	public int getRemainingQuantity() {
+		return remainingQuantity;
+	}
+
+	public void setRemainingQuantity(int remainingQuantity) {
+		this.remainingQuantity = remainingQuantity;
+	}
+
 	public ProductType getProductType() {
 		return productType;
 	}
 
 	public void setProductType(ProductType productType) {
 		this.productType = productType;
-	}
-
-	public List<Inventory> getInventory() {
-		return inventory;
-	}
-
-	public void setInventory(List<Inventory> inventory) {
-		this.inventory = inventory;
-	}
-
-	public List<ProductCategory> getProductCategory() {
-		return productCategory;
-	}
-
-	public void setProductCategory(List<ProductCategory> productCategory) {
-		this.productCategory = productCategory;
 	}
 
 	public List<ProductDiscount> getProductDiscount() {
