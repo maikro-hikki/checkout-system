@@ -31,10 +31,10 @@ public class Product {
 	//type of product
 	private ProductType productType;
 	
-	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+	@OneToMany
     private List<ProductDiscount> productDiscount;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
     @JoinColumn(name = "fk_adminId")
 	private Admin admin;
 

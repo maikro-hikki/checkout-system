@@ -21,11 +21,11 @@ public abstract class Discount {
 	
 	private DiscountType discountType;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "fk_adminId")
 	private Admin admin;
 	
-	@OneToMany(mappedBy = "discount", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "discount")
     private List<ProductDiscount> productDiscount;
 
 	public Discount() {

@@ -14,11 +14,11 @@ public class ProductDiscount {
 	@GeneratedValue
 	private long productDiscountId;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
     @JoinColumn(name = "productId")
 	private Product product;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
     @JoinColumn(name = "discountId")
 	private Discount discount;
 

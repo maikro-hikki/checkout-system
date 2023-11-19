@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.maikro.checkoutSystem.constants.UserType;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrimaryKeyJoinColumn;
@@ -13,11 +14,11 @@ import jakarta.persistence.PrimaryKeyJoinColumn;
 public class Admin extends UserClass {
 	
 	//products added by the admin user
-	@OneToMany(mappedBy = "admin")
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<Product> products;
 	
 	//discounts added by the admin user
-	@OneToMany(mappedBy = "admin")
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<Discount> discount;
 
 	public Admin() {
