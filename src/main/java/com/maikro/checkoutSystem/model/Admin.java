@@ -24,6 +24,10 @@ public class Admin extends UserClass {
 		super();
 	}
 
+	public Admin(UserType userType) {
+		super(userType);
+	}
+
 	public Admin(String username, String password, String firstName, String lastName, UserType userType) {
 		super(username, password, firstName, lastName, userType);
 	}

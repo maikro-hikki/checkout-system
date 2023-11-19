@@ -22,6 +22,10 @@ public class Customer extends UserClass {
 	public Customer() {
 		super();
 	}
+	
+	public Customer(UserType userType) {
+		super(userType);
+	}
 
 	public Customer(String username, String password, String firstName, String lastName, UserType userType) {
 		super(username, password, firstName, lastName, userType);

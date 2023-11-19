@@ -28,6 +28,10 @@ public abstract class UserClass {
 
 	public UserClass() {
 	}
+	
+	public UserClass(UserType userType) {
+		this.userType = userType;
+	}
 
 	public UserClass(String username, String password, String firstName, String lastName, UserType userType) {
 		super();
