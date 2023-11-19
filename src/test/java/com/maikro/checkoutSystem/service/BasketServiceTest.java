@@ -27,12 +27,9 @@ class BasketServiceTest {
 	
 	@Autowired
     private UserClassService userClassService;
-	
-	@Autowired
-	private CustomerService customerService;
 
 	@Test
-	void testAddProductToBasket_ShouldReturnTrueIfSuccessfullyAddedWithValidInputs() {
+	void testAddProductToBasket_ShouldReturnTrue_IfSuccessfullyAddedWithValidInputs() {
 			
 		Customer customer1 = new Customer(UserType.CUSTOMER);
 		userClassService.addCustomerUser(customer1);	
@@ -50,7 +47,7 @@ class BasketServiceTest {
 	}
 	
 	@Test
-	void testAddProductToBasket_ShouldReturnFalseIfCustomerOrProductNotInDataBase() {
+	void testAddProductToBasket_ShouldReturnFalse_IfCustomerOrProductNotInDataBase() {
 			
 		Customer customer1 = new Customer(UserType.CUSTOMER);
 		
@@ -74,7 +71,7 @@ class BasketServiceTest {
 	}
 	
 	@Test
-	void testAddProductToBasket_ShouldReturnFalseIfQuantityIsInvalid() {
+	void testAddProductToBasket_ShouldReturnFalse_IfQuantityIsInvalid() {
 			
 		Customer customer1 = new Customer(UserType.CUSTOMER);
 		userClassService.addCustomerUser(customer1);
@@ -115,7 +112,7 @@ class BasketServiceTest {
 	}
 	
 	@Test
-	void testFindByCustomerId_ShouldReturnSameNumberOfItemsAsExpectedNumber() {
+	void testFindByCustomerId_ShouldReturnSameNumberOfItems_AsExpectedNumber() {
 		
 		Admin admin = new Admin(UserType.ADMIN);		
 		userClassService.addAdminUser(admin);
@@ -145,7 +142,7 @@ class BasketServiceTest {
 	}
 	
 	@Test
-	void testAddProductToBasket_ShouldIncreaseTheQuantityOfProductIfProductAlreadyExists() {
+	void testAddProductToBasket_ShouldIncreaseTheQuantityOfProduct_IfProductAlreadyExists() {
 			
 		Customer customer1 = new Customer(UserType.CUSTOMER);
 		userClassService.addCustomerUser(customer1);	
@@ -170,6 +167,35 @@ class BasketServiceTest {
 		List<Basket> retrievedBasket = basketService.findByUserId(customer1.getUserId());
 		
 		assertEquals(7, retrievedBasket.get(0).getQuantity());
+		
+	}
+	
+	@Test
+	void testRemoveProduct_ShouldReturnTrue_IfSuccessfullyRemovedProductFromBasket() {
+			
+		Customer customer = new Customer(UserType.CUSTOMER);
+		userClassService.addCustomerUser(customer);	
+		
+		Admin admin = new Admin(UserType.ADMIN);		
+		userClassService.addAdminUser(admin);
+		
+		Product product1 = new Product();
+		product1.setAdmin(admin);
+		product1.setRemainingQuantity(10);		
+		productService.addNewProduct(product1);
+		
+		Product product2 = new Product();
+		product2.setAdmin(admin);
+		product2.setRemainingQuantity(20);		
+		productService.addNewProduct(product2);	
+		
+		basketService.addProductToBasket(customer.getUserId(), product1.getProductId(), 5);
+		basketService.addProductToBasket(customer.getUserId(), product2.getProductId(), 5);
+		
+		basketService.removeProduct(customer.getUserId(), product1.getProductId());
+		
+		assertEquals(-1, basketService.productInCustomerBasket(customer.getUserId(), product1.getProductId()));
+		assertTrue(basketService.productInCustomerBasket(customer.getUserId(), product2.getProductId()) >= 0);
 		
 	}
 

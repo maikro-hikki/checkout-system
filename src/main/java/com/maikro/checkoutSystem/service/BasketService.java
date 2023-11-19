@@ -1,6 +1,7 @@
 package com.maikro.checkoutSystem.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,11 @@ public class BasketService {
 
 	@Autowired
 	private CustomerService customerService;
-	
+
+	public Optional<Basket> findByBasketId(long basketId) {
+		return basketRepo.findById(basketId);
+	}
+
 	public List<Basket> findByUserId(long userId) {
 		return basketRepo.findByCustomerUserId(userId);
 	}
@@ -51,18 +56,40 @@ public class BasketService {
 				Product product = productService.findByProductId(productId).get();
 
 				if (quantity <= product.getRemainingQuantity() && quantity > 0) {
-					
+
 					int i = productInCustomerBasket(userId, productId);
-					
-					if ( i >= 0) {
+
+					if (i >= 0) {
 						List<Basket> retrievedBasket = findByUserId(userId);
 						Basket basket = retrievedBasket.get(i);
 						basket.setQuantity(basket.getQuantity() + quantity);
 						basketRepo.save(basket);
-					}else {
+					} else {
 						Basket basket = new Basket(product, customer, quantity);
 						basketRepo.save(basket);
 					}
+
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	public boolean removeProduct(long userId, long productId) {
+
+		if (customerService.customerExist(userId)) {
+
+			if (productService.productExist(productId)) {
+
+				int i = productInCustomerBasket(userId, productId);
+
+				if (i >= 0) {
+
+					List<Basket> retrievedBasket = findByUserId(userId);
+
+					basketRepo.deleteById(retrievedBasket.get(i).getBasketId());
 
 					return true;
 				}
