@@ -1,5 +1,7 @@
 package com.maikro.checkoutSystem.model;
 
+import java.util.Objects;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -8,22 +10,22 @@ import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Basket {
-	
+
 	@Id
 	@GeneratedValue
 	private long basketId;
-	
-	//product in the basket
+
+	// product in the basket
 	@ManyToOne
 	@JoinColumn(name = "fk_productId")
 	private Product product;
-	
-	//the customer the basket belongs to
+
+	// the customer the basket belongs to
 	@ManyToOne
 	@JoinColumn(name = "fk_customerId")
 	private Customer customer;
-	
-	//quantity of product in the basket
+
+	// quantity of product in the basket
 	private int quantity;
 
 	public Basket() {

@@ -31,17 +31,17 @@ public class Customer extends UserClass {
 		super(username, password, firstName, lastName, userType);
 	}
 
-	public Customer(List<Basket> basketProduct) {
+	public Customer(List<Basket> basket) {
 		super();
-		this.basket = basketProduct;
+		this.basket = basket;
 	}
 
-	public List<Basket> getBasketProduct() {
+	public List<Basket> getBasket() {
 		return basket;
 	}
 
-	public void setBasketProduct(List<Basket> basketProduct) {
-		this.basket = basketProduct;
+	public void setBasketProduct(List<Basket> basket) {
+		this.basket = basket;
 	}
 
 }

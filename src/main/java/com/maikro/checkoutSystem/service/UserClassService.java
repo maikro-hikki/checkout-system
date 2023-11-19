@@ -16,6 +16,10 @@ public class UserClassService {
 
 	@Autowired
 	private UserClassRepo userClassRepo;
+	
+	public Optional<UserClass> findById(long userId) {
+		return userClassRepo.findById(userId);
+	}
 
 	public void addAdminUser(Admin admin) {
 		userClassRepo.save(admin);
