@@ -17,7 +17,7 @@ public class UserClassService {
 	@Autowired
 	private UserClassRepo userClassRepo;
 	
-	public Optional<UserClass> findById(long userId) {
+	public Optional<UserClass> findByUserId(long userId) {
 		return userClassRepo.findById(userId);
 	}
 

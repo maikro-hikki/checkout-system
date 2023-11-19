@@ -24,9 +24,7 @@ public class ProductDiscount {
 	public ProductDiscount() {
 	}
 
-	public ProductDiscount(long productDiscountId, Product product, Discount discount) {
-		super();
-		this.productDiscountId = productDiscountId;
+	public ProductDiscount(Product product, Discount discount) {
 		this.product = product;
 		this.discount = discount;
 	}
