@@ -5,7 +5,6 @@ import java.util.List;
 import com.maikro.checkoutSystem.constants.DiscountType;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
