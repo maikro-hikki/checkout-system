@@ -82,14 +82,14 @@ public class ProductServiceTest {
         productService.addNewProduct(product);
         
         //check if the method can find the existing product
-        assertTrue(productService.doesProductExistById(product.getProductId()));
+        assertTrue(productService.productExist(product.getProductId()));
     }
     
     @Test
     public void testDoesProductExistById_For_NonExistingProduct() {
     	
         //check if the method cannot find the non-existing product
-        assertFalse(productService.doesProductExistById(123456789));
+        assertFalse(productService.productExist(123456789));
     }
     
     @Test
@@ -108,7 +108,7 @@ public class ProductServiceTest {
         productService.removeProductById(product.getProductId());
         
         //check if the method cannot find the removed product
-        assertFalse(productService.doesProductExistById(product.getProductId()));
+        assertFalse(productService.productExist(product.getProductId()));
     }
     
     @Test

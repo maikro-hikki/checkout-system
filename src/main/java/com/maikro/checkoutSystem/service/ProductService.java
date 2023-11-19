@@ -22,7 +22,7 @@ public class ProductService {
 		productRepo.deleteById(productId);
 	}
 	
-	public boolean doesProductExistById(long productId) {
+	public boolean productExist(long productId) {
 		return productRepo.findById(productId).isPresent();
 	}
 	
