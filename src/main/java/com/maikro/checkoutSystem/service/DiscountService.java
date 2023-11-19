@@ -13,6 +13,10 @@ public class DiscountService {
 	@Autowired
 	private DiscountRepo discountRepo;
 	
+	public boolean discountExist(long discountId) {
+		return discountRepo.findById(discountId).isPresent();
+	}
+	
 	public void addDiscountByQuantity(DiscountByQuantity discount) {
 		discountRepo.save(discount);
 	}

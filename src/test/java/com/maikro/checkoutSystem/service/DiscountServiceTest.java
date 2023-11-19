@@ -25,7 +25,7 @@ class DiscountServiceTest {
     private UserClassService userClassService;
 
 	@Test
-	void testAddDiscountByQuantity() {
+	void testAddDiscountByQuantity_ShouldAddTypeDiscountByQuantity_ToDataBase() {
 		
 		//create an admin to make a discount
     	Admin admin = new Admin();
@@ -47,7 +47,7 @@ class DiscountServiceTest {
 	}
 	
 	@Test
-	void testAddDiscountByProduct() {
+	void testAddDiscountByProduct_ShouldAddTypeDiscountByProduct_ToDataBase() {
 		
 		//create an admin to make a discount
     	Admin admin = new Admin();
@@ -69,7 +69,7 @@ class DiscountServiceTest {
 	}
 	
 	@Test
-    public void testRemoveDiscountById_for_DiscountByQuantity() {
+    public void testRemoveDiscountById_ShouldRemoveTypeDiscountByQuantity_FromDatabase() {
     	
 		//create an admin to make a discount
     	Admin admin = new Admin();
@@ -90,7 +90,7 @@ class DiscountServiceTest {
     }
 	
 	@Test
-    public void testRemoveDiscountById_for_DiscountByProduct() {
+    public void testRemoveDiscountById_ShouldRemoveTypeDiscountByProduct_FromDatabase() {
     	
 		//create an admin to make a discount
     	Admin admin = new Admin();
