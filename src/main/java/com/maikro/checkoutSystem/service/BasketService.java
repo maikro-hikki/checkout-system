@@ -6,9 +6,13 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.maikro.checkoutSystem.constants.DiscountType;
 import com.maikro.checkoutSystem.model.Basket;
 import com.maikro.checkoutSystem.model.Customer;
+import com.maikro.checkoutSystem.model.DiscountByProduct;
+import com.maikro.checkoutSystem.model.DiscountByQuantity;
 import com.maikro.checkoutSystem.model.Product;
+import com.maikro.checkoutSystem.model.ProductDiscount;
 import com.maikro.checkoutSystem.repository.BasketRepo;
 
 @Service
@@ -22,6 +26,15 @@ public class BasketService {
 
 	@Autowired
 	private CustomerService customerService;
+
+	@Autowired
+	private ProductDiscountService productDiscountService;
+
+	@Autowired
+	private DiscountByQuantityService discountByQuantityService;
+
+	@Autowired
+	private DiscountByProductService discountByProductService;
 
 	public Optional<Basket> findByBasketId(long basketId) {
 		return basketRepo.findById(basketId);
@@ -97,6 +110,13 @@ public class BasketService {
 		}
 
 		return false;
+	}
+
+	public double calculateProductPrice(long userId, long productId) {
+		
+		double productUnitPrice = productService.getProductUnitPrice(productId);
+		
+		return productUnitPrice;
 	}
 
 }

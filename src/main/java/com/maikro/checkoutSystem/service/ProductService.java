@@ -10,24 +10,33 @@ import com.maikro.checkoutSystem.repository.ProductRepo;
 
 @Service
 public class ProductService {
-	
+
 	@Autowired
 	private ProductRepo productRepo;
-	
+
 	public void addNewProduct(Product product) {
 		productRepo.save(product);
 	}
-	
+
 	public void removeProductById(long productId) {
 		productRepo.deleteById(productId);
 	}
-	
+
 	public boolean productExist(long productId) {
 		return productRepo.findById(productId).isPresent();
 	}
-	
-	public Optional<Product> findByProductId(long productId){
+
+	public Optional<Product> findByProductId(long productId) {
 		return productRepo.findById(productId);
+	}
+
+	public double getProductUnitPrice(long productId) {
+		
+		if (productExist(productId)) {
+			return findByProductId(productId).get().getUnitPrice();
+		}
+		
+		return -1;
 	}
 
 }
