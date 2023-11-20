@@ -128,5 +128,18 @@ public class BasketService {
 		//returns final price, or -1 if there are error
 		return finalProductPrice;
 	}
+	
+	public double totalCostInBasket(long userId) {
+		
+		double totalCost = 0;
+		
+		List<Basket> basket = findByUserId(userId);
+		
+		for (int i = 0; i < basket.size(); i++) {
+			totalCost += calculateProductPrice(basket.get(i).getProduct().getProductId(), basket.get(i).getQuantity());
+		}
+		
+		return totalCost;
+	}
 
 }
