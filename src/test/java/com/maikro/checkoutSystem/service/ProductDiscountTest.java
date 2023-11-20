@@ -268,10 +268,14 @@ class ProductDiscountTest {
         //get productDiscount2
         ProductDiscount retrievedProductDiscount2 = productDiscountService.findByProductIdAndDiscountId(product.getProductId(), discount2.getDiscountId());
         
-        //productDiscount1 Id should match
+        //Ids of productDiscount1 attributes should match
         assertEquals(productDiscount1.getProductDiscountId(), retrievedProductDiscount1.getProductDiscountId());
-        //productDiscount2 Id should match
+        assertEquals(productDiscount1.getProduct().getProductId(), retrievedProductDiscount1.getProduct().getProductId());
+        assertEquals(productDiscount1.getDiscount().getDiscountId(), retrievedProductDiscount1.getDiscount().getDiscountId());
+        //Ids of productDiscount2 attributes should match
         assertEquals(productDiscount2.getProductDiscountId(), retrievedProductDiscount2.getProductDiscountId());
+        assertEquals(productDiscount2.getProduct().getProductId(), retrievedProductDiscount2.getProduct().getProductId());
+        assertEquals(productDiscount2.getDiscount().getDiscountId(), retrievedProductDiscount2.getDiscount().getDiscountId());
 	}
 	
 	@Test
