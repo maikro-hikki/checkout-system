@@ -33,12 +33,31 @@ public class ProductDiscountService {
 		return productDiscountRepo.findByProductProductId(productId);
 	}
 
+	public ProductDiscount findByProductIdAndDiscountId(long productId, long discountId) {
+
+		if (productService.productExist(productId)) {
+
+			if (discountService.discountExist(discountId)) {
+
+				List<ProductDiscount> productDiscounts = findByProductId(productId);
+
+				for (int i = 0; i < productDiscounts.size(); i++) {
+					if (productDiscounts.get(i).getDiscount().getDiscountId() == discountId) {
+						return productDiscounts.get(i);
+					}
+				}
+			}
+		}
+
+		return null;
+	}
+
 	public boolean discountAlreadyAppliedToProduct(long productId, long discountId) {
 
 		List<ProductDiscount> productDiscount = findByProductId(productId);
 
 		if (!productDiscount.isEmpty()) {
-			
+
 			for (int i = 0; i < productDiscount.size(); i++) {
 				if (productDiscount.get(i).getDiscount().getDiscountId() == discountId) {
 					return true;
@@ -49,28 +68,73 @@ public class ProductDiscountService {
 		return false;
 	}
 
-	public boolean addProductDiscount(long productId, long discountId) {
+	public boolean addProductDiscountByProductAndDiscount(long productId, long discountId) {
 
 		if (productService.productExist(productId)) {
 
 			if (discountService.discountExist(discountId)) {
 
-				Product product = productService.findByProductId(productId).get();
-				Discount discount = discountService.findByDiscountId(discountId).get();
+				if (!discountAlreadyAppliedToProduct(productId, discountId)) {
 
-				ProductDiscount productDiscount = new ProductDiscount(product, discount);
+					Product product = productService.findByProductId(productId).get();
+					Discount discount = discountService.findByDiscountId(discountId).get();
 
-				productDiscountRepo.save(productDiscount);
+					ProductDiscount productDiscount = new ProductDiscount(product, discount);
 
-				return true;
+					productDiscountRepo.save(productDiscount);
+
+					return true;
+				}
 			}
 		}
 
 		return false;
 	}
 
-	public void removeProductDiscountById(long productDiscountId) {
+	public boolean addProductDiscount(ProductDiscount productDiscount) {
+
+		long productId = productDiscount.getProduct().getProductId();
+		long discountId = productDiscount.getDiscount().getDiscountId();
+
+		if (productService.productExist(productId)) {
+
+			if (discountService.discountExist(discountId)) {
+
+				if (!discountAlreadyAppliedToProduct(productId, discountId)) {
+
+					productDiscountRepo.save(productDiscount);
+
+					return true;
+
+				}
+			}
+		}
+
+		return false;
+	}
+
+	public void removeProductDiscountByProductDiscountId(long productDiscountId) {
 		productDiscountRepo.deleteById(productDiscountId);
+	}
+
+	public boolean removeProductDiscountByProductIdAndDiscountId(long productId, long discountId) {
+
+		if (productService.productExist(productId)) {
+
+			if (discountService.discountExist(discountId)) {
+
+				if (discountAlreadyAppliedToProduct(productId, discountId)) {
+
+					ProductDiscount productDiscount = findByProductIdAndDiscountId(productId, discountId);
+
+					productDiscountRepo.deleteById(productDiscount.getProductDiscountId());
+
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 }
