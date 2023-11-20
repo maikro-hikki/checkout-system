@@ -17,6 +17,7 @@ public class DiscountByQuantity extends Discount{
 
 	public DiscountByQuantity() {
 		super();
+		this.setDiscountType(DiscountType.QUANTITY);
 	}
 
 	public DiscountByQuantity(long discountId, DiscountType discountType, Admin admin,

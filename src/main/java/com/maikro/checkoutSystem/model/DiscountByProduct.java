@@ -15,6 +15,7 @@ public class DiscountByProduct extends Discount{
 
 	public DiscountByProduct() {
 		super();
+		this.setDiscountType(DiscountType.INDIVIDUAL_PRODUCT);
 	}
 
 	public DiscountByProduct(long discountId, DiscountType discountType, Admin admin,

@@ -23,6 +23,7 @@ public class Admin extends UserClass {
 
 	public Admin() {
 		super();
+		this.setUserType(UserType.ADMIN);
 	}
 
 	public Admin(UserType userType) {

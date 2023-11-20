@@ -21,6 +21,7 @@ public class Customer extends UserClass {
 
 	public Customer() {
 		super();
+		this.setUserType(UserType.CUSTOMER);
 	}
 	
 	public Customer(UserType userType) {

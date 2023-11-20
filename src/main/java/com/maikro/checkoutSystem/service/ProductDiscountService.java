@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.maikro.checkoutSystem.constants.DiscountType;
 import com.maikro.checkoutSystem.model.Discount;
 import com.maikro.checkoutSystem.model.Product;
 import com.maikro.checkoutSystem.model.ProductDiscount;
@@ -22,6 +23,12 @@ public class ProductDiscountService {
 
 	@Autowired
 	private DiscountService discountService;
+	
+	@Autowired
+	private DiscountByProductService discountByProductService;
+	
+	@Autowired
+	private DiscountByQuantityService discountByQuantityService;
 
 //	public void addNewProduct()
 
@@ -135,6 +142,44 @@ public class ProductDiscountService {
 		}
 
 		return false;
+	}
+	
+	public List<Discount> findDiscountsByProductId(long productId){
+		
+		return productDiscountRepo.findDiscountsByProductId(productId);
+	}
+	
+	//returns the final price of the product with the quantity and discounts applied
+	public double applyDiscounts(double productUnitPrice, List<Discount> discounts, int quantity) {
+		
+		if (discounts.isEmpty()) {
+			return -1;
+		}
+		
+		if (productUnitPrice < 0) {
+			return -1;
+		}
+		
+		if (quantity < 0) {
+			return -1;
+		}
+		
+		double discountedPrice = productUnitPrice * quantity;
+		
+		for (int i = 0; i < discounts.size(); i++) {
+			
+			//applies price deduction based on the type of discount
+			if (discounts.get(i).getDiscountType() == DiscountType.INDIVIDUAL_PRODUCT) {
+				
+				discountedPrice = discountedPrice - discountByProductService.amountOfDiscount(discounts.get(i).getDiscountId(), productUnitPrice, quantity);
+				
+			} else if(discounts.get(i).getDiscountType() == DiscountType.QUANTITY){
+				
+				discountedPrice = discountedPrice - discountByQuantityService.amountOfDiscount(discounts.get(i).getDiscountId(), productUnitPrice, quantity);
+			}
+		}
+		
+		return discountedPrice;
 	}
 
 }

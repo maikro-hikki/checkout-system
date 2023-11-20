@@ -112,7 +112,7 @@ public class ProductServiceTest {
     }
     
     @Test
-    public void testFindByProductId() {
+    public void testFindByProductId_ShouldReturnSameProduct_ForCalledProductId() {
     	
     	//create an admin to make a product
     	Admin admin = new Admin();
@@ -128,6 +128,44 @@ public class ProductServiceTest {
         
         //check if the found productId is the same as the created product's Id
         assertEquals(product.getProductId(), foundProduct.getProductId());
+    }
+    
+    @Test
+    public void testGetProductUnitPrice_ShouldReturnProductUnitPrice_IfProductExist() {
+    	
+    	//create an admin to make a product
+    	Admin admin = new Admin();
+    	userClassService.addAdminUser(admin);
+    	//create a product and set it under the admin
+        Product product = new Product();
+        product.setAdmin(admin);
+        product.setUnitPrice(10.07);
+        
+        //add the created product into the repository
+        productService.addNewProduct(product);
+        //get unit price of the product by productId
+        double unitPrice = productService.getProductUnitPrice(product.getProductId());
+        
+        //check if the unit price is the same as the expected unit price
+        assertEquals(10.07, unitPrice);
+    }
+    
+    @Test
+    public void testGetProductUnitPrice_ShouldReturnNegative1_IfProductDoesntExist() {
+    	
+    	//create an admin to make a product
+    	Admin admin = new Admin();
+    	userClassService.addAdminUser(admin);
+    	//create a product and set it under the admin
+        Product product = new Product();
+        product.setAdmin(admin);
+        product.setUnitPrice(10.07);
+        
+        //find the product by productId which was not added to the database
+        double unitPrice = productService.getProductUnitPrice(product.getProductId());
+        
+        //check if the output is -1 since product is not in the database
+        assertEquals(-1, unitPrice);
     }
     
 }

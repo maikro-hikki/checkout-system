@@ -6,13 +6,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.maikro.checkoutSystem.constants.DiscountType;
 import com.maikro.checkoutSystem.model.Basket;
 import com.maikro.checkoutSystem.model.Customer;
-import com.maikro.checkoutSystem.model.DiscountByProduct;
-import com.maikro.checkoutSystem.model.DiscountByQuantity;
+import com.maikro.checkoutSystem.model.Discount;
 import com.maikro.checkoutSystem.model.Product;
-import com.maikro.checkoutSystem.model.ProductDiscount;
 import com.maikro.checkoutSystem.repository.BasketRepo;
 
 @Service
@@ -29,12 +26,6 @@ public class BasketService {
 
 	@Autowired
 	private ProductDiscountService productDiscountService;
-
-	@Autowired
-	private DiscountByQuantityService discountByQuantityService;
-
-	@Autowired
-	private DiscountByProductService discountByProductService;
 
 	public Optional<Basket> findByBasketId(long basketId) {
 		return basketRepo.findById(basketId);
@@ -112,11 +103,30 @@ public class BasketService {
 		return false;
 	}
 
-	public double calculateProductPrice(long userId, long productId) {
+	public double calculateProductPrice(long productId, int quantity) {
 		
+		//get unit price of product
 		double productUnitPrice = productService.getProductUnitPrice(productId);
 		
-		return productUnitPrice;
+		//return -1 if there is error
+		if (productUnitPrice == -1) {
+			
+			return -1;
+		}
+		
+		//get all discounts by productId
+		List<Discount> discounts = productDiscountService.findDiscountsByProductId(productId);
+		
+		if (discounts.isEmpty()) {
+			
+			return productUnitPrice * quantity;
+		}
+		
+		//calculate final price after adding discounts
+		double finalProductPrice = productDiscountService.applyDiscounts(productUnitPrice, discounts, quantity);
+		
+		//returns final price, or -1 if there are error
+		return finalProductPrice;
 	}
 
 }

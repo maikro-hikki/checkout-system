@@ -1,5 +1,7 @@
 package com.maikro.checkoutSystem.service;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,17 @@ public class DiscountService {
 	
 	public void removeDiscountById(long discountId) {
 		discountRepo.deleteById(discountId);
+	}
+	
+	public double roundToTwoDecimals(double number) {
+		
+		DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
+        
+        String roundedNumberString = decimalFormat.format(number);
+        double roundedNumber = Double.parseDouble(roundedNumberString);
+        
+        return roundedNumber;
 	}
 
 }
