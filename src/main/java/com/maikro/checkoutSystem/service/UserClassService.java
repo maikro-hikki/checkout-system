@@ -21,12 +21,12 @@ public class UserClassService {
 		return userClassRepo.findById(userId);
 	}
 
-	public void addAdminUser(Admin admin) {
-		userClassRepo.save(admin);
+	public Admin addAdminUser(Admin admin) {
+		return userClassRepo.save(admin);
 	}
 
-	public void addCustomerUser(Customer customer) {
-		userClassRepo.save(customer);
+	public Customer addCustomerUser(Customer customer) {
+		return userClassRepo.save(customer);
 	}
 
 	public void removeUserById(long userId) {

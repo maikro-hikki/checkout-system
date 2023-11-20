@@ -17,8 +17,12 @@ public class AdminService {
 	public Optional<Admin> findByUserId(long userId){
 		return adminRepo.findById(userId);
 	}
+
+	public Admin addAdminUser(Admin admin) {
+		return adminRepo.save(admin);
+	}
 	
-	public boolean customerExist(long userId) {
+	public boolean adminExist(long userId) {
 		
 		if (adminRepo.findById(userId).isPresent()) {
 			return true;

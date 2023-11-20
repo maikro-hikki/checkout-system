@@ -17,6 +17,10 @@ public class CustomerService {
 	public Optional<Customer> findByUserId(long userId){
 		return customerRepo.findById(userId);
 	}
+
+	public Customer addCustomerUser(Customer customer) {
+		return customerRepo.save(customer);
+	}
 	
 	public boolean customerExist(long userId) {
 		
