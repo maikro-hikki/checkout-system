@@ -22,15 +22,40 @@ public class UserClassService {
 	}
 
 	public Admin addAdminUser(Admin admin) {
+		
+		if (findByUserId(admin.getUserId()).isPresent() || usernameExist(admin.getUsername())) {
+			System.out.println("test");
+			return null;
+		}
+		
 		return userClassRepo.save(admin);
 	}
 
 	public Customer addCustomerUser(Customer customer) {
+		
+		if (findByUserId(customer.getUserId()).isPresent() || usernameExist(customer.getUsername())) {
+			return null;
+		}
+		
 		return userClassRepo.save(customer);
 	}
+	
+	public Admin createAdminUser(String username, String password, String firstName, String lastName) {
+		
+		Admin admin = new Admin(username, password, firstName, lastName, UserType.ADMIN);
+		
+		return userClassRepo.save(admin);
+	}
 
-	public void removeUserById(long userId) {
-		userClassRepo.deleteById(userId);
+	public int removeUserById(long userId) {
+		
+		if (findByUserId(userId).isPresent()) {
+			
+			userClassRepo.deleteById(userId);
+			return 1;
+		}
+		
+		return -1;
 	}
 
 	public boolean isAdmin(long userId) {
@@ -57,6 +82,11 @@ public class UserClassService {
 		}
 
 		return false;
+	}
+	
+	public boolean usernameExist(String username) {
+		
+		return userClassRepo.findByUsername(username).isPresent();
 	}
 
 }

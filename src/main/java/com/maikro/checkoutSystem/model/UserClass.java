@@ -2,6 +2,7 @@ package com.maikro.checkoutSystem.model;
 
 import com.maikro.checkoutSystem.constants.UserType;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -16,6 +17,7 @@ public abstract class UserClass {
 	@GeneratedValue
 	private long userId;
 	
+	@Column(unique = true)
 	private String username;
 	
 	private String password;
