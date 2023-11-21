@@ -28,8 +28,9 @@ public class Customer extends UserClass {
 		super(userType);
 	}
 
-	public Customer(String username, String password, String firstName, String lastName, UserType userType) {
-		super(username, password, firstName, lastName, userType);
+	public Customer(String username, String password, String firstName, String lastName) {
+		super(username, password, firstName, lastName);
+		this.setUserType(UserType.CUSTOMER);
 	}
 
 	public Customer(List<Basket> basket) {

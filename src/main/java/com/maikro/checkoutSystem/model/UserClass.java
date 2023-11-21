@@ -12,36 +12,35 @@ import jakarta.persistence.InheritanceType;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class UserClass {
-	
+
 	@Id
 	@GeneratedValue
 	private long userId;
-	
+
 	@Column(unique = true)
 	private String username;
-	
+
 	private String password;
-	
+
 	private String firstName;
-	
+
 	private String lastName;
-	
+
 	private UserType userType;
 
 	public UserClass() {
 	}
-	
+
 	public UserClass(UserType userType) {
 		this.userType = userType;
 	}
 
-	public UserClass(String username, String password, String firstName, String lastName, UserType userType) {
+	public UserClass(String username, String password, String firstName, String lastName) {
 		super();
 		this.username = username;
 		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.userType = userType;
 	}
 
 	public long getUserId() {
@@ -86,6 +85,6 @@ public abstract class UserClass {
 
 	public void setUserType(UserType userType) {
 		this.userType = userType;
-	}	
+	}
 
 }

@@ -16,46 +16,63 @@ public class UserClassService {
 
 	@Autowired
 	private UserClassRepo userClassRepo;
-	
+
 	public Optional<UserClass> findByUserId(long userId) {
 		return userClassRepo.findById(userId);
 	}
 
 	public Admin addAdminUser(Admin admin) {
-		
+
 		if (findByUserId(admin.getUserId()).isPresent() || usernameExist(admin.getUsername())) {
-			
+
 			return null;
 		}
-		
+
 		return userClassRepo.save(admin);
 	}
 
 	public Customer addCustomerUser(Customer customer) {
-		System.out.println(customer.getUsername());
+		
 		if (findByUserId(customer.getUserId()).isPresent() || usernameExist(customer.getUsername())) {
-			
+
+			return null;
+		}
+
+		return userClassRepo.save(customer);
+	}
+
+	public Admin addAdminUser(String username, String password, String firstName, String lastName) {
+
+		if (usernameExist(username)) {
+
 			return null;
 		}
 		
-		return userClassRepo.save(customer);
-	}
-	
-	public Admin createAdminUser(String username, String password, String firstName, String lastName) {
-		
-		Admin admin = new Admin(username, password, firstName, lastName, UserType.ADMIN);
-		
+		Admin admin = new Admin(username, password, firstName, lastName);
+
 		return userClassRepo.save(admin);
 	}
 
-	public int removeUserById(long userId) {
+	public Customer addCustomerUser(String username, String password, String firstName, String lastName) {
+
+		if (usernameExist(username)) {
+
+			return null;
+		}
 		
+		Customer customer = new Customer(username, password, firstName, lastName);
+
+		return userClassRepo.save(customer);
+	}
+
+	public int removeUserById(long userId) {
+
 		if (findByUserId(userId).isPresent()) {
-			
+
 			userClassRepo.deleteById(userId);
 			return 1;
 		}
-		
+
 		return -1;
 	}
 
@@ -84,9 +101,9 @@ public class UserClassService {
 
 		return false;
 	}
-	
+
 	public boolean usernameExist(String username) {
-		
+
 		return userClassRepo.findByUsername(username).isPresent();
 	}
 

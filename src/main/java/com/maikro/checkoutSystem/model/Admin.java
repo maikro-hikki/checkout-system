@@ -30,8 +30,9 @@ public class Admin extends UserClass {
 		super(userType);
 	}
 
-	public Admin(String username, String password, String firstName, String lastName, UserType userType) {
-		super(username, password, firstName, lastName, userType);
+	public Admin(String username, String password, String firstName, String lastName) {
+		super(username, password, firstName, lastName);
+		this.setUserType(UserType.ADMIN);
 	}
 
 	public List<Product> getProducts() {
