@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.maikro.checkoutSystem.Utility;
 import com.maikro.checkoutSystem.model.DiscountByQuantity;
 import com.maikro.checkoutSystem.repository.DiscountByQuantityRepo;
 
@@ -42,7 +43,7 @@ public class DiscountByQuantityService {
 			//value of discount received for the productQuantity of the price
 			discountedValue = (price * discountAmount) * numberOfDiscounts;
 
-			return discountService.roundToTwoDecimals(discountedValue);
+			return Utility.roundToTwoDecimals(discountedValue);
 		}
 
 		return -1;

@@ -37,16 +37,5 @@ public class DiscountService {
 	public void removeDiscountById(long discountId) {
 		discountRepo.deleteById(discountId);
 	}
-	
-	public double roundToTwoDecimals(double number) {
-		
-		DecimalFormat decimalFormat = new DecimalFormat("#.##");
-        decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
-        
-        String roundedNumberString = decimalFormat.format(number);
-        double roundedNumber = Double.parseDouble(roundedNumberString);
-        
-        return roundedNumber;
-	}
 
 }

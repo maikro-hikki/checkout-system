@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.maikro.checkoutSystem.Utility;
 import com.maikro.checkoutSystem.model.DiscountByProduct;
 import com.maikro.checkoutSystem.repository.DiscountByProductRepo;
 
@@ -13,9 +14,6 @@ public class DiscountByProductService {
 	
 	@Autowired
 	private DiscountByProductRepo discountByProductRepo;
-	
-	@Autowired
-	private DiscountService discountService;
 
 	public Optional<DiscountByProduct> findByDiscountId(long discountId) {
 		return discountByProductRepo.findById(discountId);
@@ -35,7 +33,7 @@ public class DiscountByProductService {
 			
 			discountedValue = discountedValue * discountAmount;
 			
-			return discountService.roundToTwoDecimals(discountedValue);
+			return Utility.roundToTwoDecimals(discountedValue);
 		}
 		
 		return -1;
