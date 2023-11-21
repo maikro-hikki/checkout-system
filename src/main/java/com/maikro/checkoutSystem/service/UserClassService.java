@@ -20,6 +20,11 @@ public class UserClassService {
 	public Optional<UserClass> findByUserId(long userId) {
 		return userClassRepo.findById(userId);
 	}
+	
+	public Optional<UserClass> findByUsername(String username){
+		
+		return userClassRepo.findByUsername(username);
+	}
 
 	public Admin addAdminUser(Admin admin) {
 

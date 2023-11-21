@@ -2,32 +2,32 @@ package com.maikro.checkoutSystem.constants;
 
 public class CustomResponse<T> {
 
-	private T object;
+	private T data;
 
-	private String warningMessage;
+	private String message;
 
 	public CustomResponse() {
 	}
 
-	public CustomResponse(T object, String warningMessage) {
-		this.object = object;
-		this.warningMessage = warningMessage;
+	public CustomResponse(T object, String message) {
+		this.data = object;
+		this.message = message;
 	}
 
 	public T getObject() {
-		return object;
+		return data;
 	}
 
 	public void setObject(T object) {
-		this.object = object;
+		this.data = object;
 	}
 
 	public String getWarningMessage() {
-		return warningMessage;
+		return message;
 	}
 
-	public void setWarningMessage(String warningMessage) {
-		this.warningMessage = warningMessage;
+	public void setWarningMessage(String message) {
+		this.message = message;
 	}
 
 }

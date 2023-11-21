@@ -20,9 +20,11 @@ public class DiscountByQuantity extends Discount{
 		this.setDiscountType(DiscountType.QUANTITY);
 	}
 
-	public DiscountByQuantity(long discountId, DiscountType discountType, Admin admin,
-			List<ProductDiscount> productDiscount) {
-		super(discountId, discountType, admin, productDiscount);
+	public DiscountByQuantity(int quantity, double discount, Admin admin) {
+		super(admin);
+		this.quantity = quantity;
+		this.discount = discount;
+		this.setDiscountType(DiscountType.QUANTITY);
 	}
 
 	public DiscountByQuantity(int quantity, double discount) {

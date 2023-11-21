@@ -1,9 +1,16 @@
 package com.maikro.checkoutSystem.controller;
 
+import java.nio.file.attribute.UserPrincipal;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.maikro.checkoutSystem.Utility;
 import com.maikro.checkoutSystem.constants.ProductType;
 import com.maikro.checkoutSystem.model.Admin;
+import com.maikro.checkoutSystem.model.DiscountByQuantity;
 import com.maikro.checkoutSystem.model.Product;
+import com.maikro.checkoutSystem.model.UserClass;
 import com.maikro.checkoutSystem.service.AdminService;
 import com.maikro.checkoutSystem.service.ProductService;
 import com.maikro.checkoutSystem.service.UserClassService;
@@ -54,9 +63,14 @@ public class AdminRestController {
 		}
 	}
 
-	@PostMapping("/product")
+	@PostMapping("/product")//////////////////////////////////
 	public ResponseEntity<String> addProductToShop(@RequestParam String name, @RequestParam String unitPrice,
 			@RequestParam String remainingQuantity, @RequestParam String productType) {
+		
+//		String currentUser = ((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+//				.getUsername();
+//		Optional<UserClass> userOptional = userClassService.getUserByUsername(currentUser);		
+//		UserClass user = userOptional.get();
 
 		if (name.isEmpty() || unitPrice.isEmpty() || remainingQuantity.isEmpty() || productType.isEmpty()) {
 
@@ -109,6 +123,42 @@ public class AdminRestController {
 		
 		return new ResponseEntity<>("Product deleted successfully", HttpStatus.NO_CONTENT);
 		
+	}
+	
+	@PostMapping("/quantity-discount")//////////////////////////////////
+	public ResponseEntity<String> addDiscountByQuantity(@RequestParam String quantity, @RequestParam String discount) {
+
+		if (quantity.isEmpty() || discount.isEmpty()) {
+
+			return new ResponseEntity<>("Please fill out all fields", HttpStatus.BAD_REQUEST);
+		}
+		
+		int quantityInt = Utility.convertStringToInt(quantity);
+		double discountDouble = Utility.convertStringToDouble(discount);
+		
+		Pageable page;///////////////////////////
+		
+		if (quantityInt == Integer.MIN_VALUE || quantityInt < 0 || (quantityInt % 1 != 0)) {
+
+			return new ResponseEntity<>("Quantity have to be an integer (number without decimals) and not negative", HttpStatus.BAD_REQUEST);
+		}
+		
+		if (discountDouble == Double.MIN_VALUE || discountDouble < 0 || discountDouble > 1) {
+			
+			return new ResponseEntity<>("Discount have to be between 0 (0%) and 1 (100%) inclusive and not negative", HttpStatus.BAD_REQUEST);
+        }
+		
+		DiscountByQuantity quantityDiscount = new DiscountByQuantity(quantityInt, discountDouble);///////////////////////////
+
+		return new ResponseEntity<>("Discount added to database successfully", HttpStatus.CREATED);
+	}
+	
+	@GetMapping("/product")
+	public ResponseEntity<Page<Product>> getProductByPage (@RequestParam int offset, @RequestParam int pageSize){
+		
+		Page<Product> allProducts = productService.findProductWithPagination(offset, pageSize);
+		
+		return new ResponseEntity<>(allProducts, HttpStatus.OK);
 	}
 
 }

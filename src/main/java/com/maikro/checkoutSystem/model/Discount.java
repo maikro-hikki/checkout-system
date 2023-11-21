@@ -34,12 +34,8 @@ public abstract class Discount {
 		this.discountType = discountType;
 	}
 
-	public Discount(long discountId, DiscountType discountType, Admin admin, List<ProductDiscount> productDiscount) {
-		super();
-		this.discountId = discountId;
-		this.discountType = discountType;
+	public Discount(Admin admin) {
 		this.admin = admin;
-		this.productDiscount = productDiscount;
 	}
 
 	public long getDiscountId() {

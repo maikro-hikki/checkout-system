@@ -1,8 +1,13 @@
 package com.maikro.checkoutSystem.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.maikro.checkoutSystem.constants.ProductType;
@@ -54,6 +59,31 @@ public class ProductService {
 		default:
 			return ProductType.ELECTRONICS;
 		}
+	}
+
+	public Page<Product> findProductWithPagination(int offset, int pageSize) {
+
+		// added
+		Pageable pageable = PageRequest.of(offset, pageSize);
+		Page<Product> products = productRepo.findAll(pageable);
+
+		// Check if the requested page is out of bounds
+		if (offset >= products.getTotalPages()) {
+			// Adjust the offset to the last page if necessary
+			pageable = PageRequest.of(products.getTotalPages() - 1, pageSize);
+			products = productRepo.findAll(pageable);
+		}
+
+		return products;
+
+//		Page<Product> products = productRepo.findAll(PageRequest.of(offset, pageSize));
+//
+//		return products;
+	}
+
+	public List<Product> findAllProductdSorted(String field) {
+
+		return productRepo.findAll(Sort.by(Sort.Direction.ASC, field));
 	}
 
 }
