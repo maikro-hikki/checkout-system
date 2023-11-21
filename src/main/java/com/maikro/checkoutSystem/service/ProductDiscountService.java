@@ -30,8 +30,6 @@ public class ProductDiscountService {
 	@Autowired
 	private DiscountByQuantityService discountByQuantityService;
 
-//	public void addNewProduct()
-
 	public Optional<ProductDiscount> findByProductDiscountId(long productDiscountId) {
 		return productDiscountRepo.findById(productDiscountId);
 	}
@@ -62,11 +60,15 @@ public class ProductDiscountService {
 	public boolean discountAlreadyAppliedToProduct(long productId, long discountId) {
 
 		List<ProductDiscount> productDiscount = findByProductId(productId);
-
+		
 		if (!productDiscount.isEmpty()) {
-
+			
 			for (int i = 0; i < productDiscount.size(); i++) {
-				if (productDiscount.get(i).getDiscount().getDiscountId() == discountId) {
+				
+				Discount discount = productDiscount.get(i).getDiscount();
+				
+				if (discount.getDiscountId() == discountId || discountTypeAppliedToProduct(productId, discountId)) {
+					
 					return true;
 				}
 			}
@@ -102,13 +104,13 @@ public class ProductDiscountService {
 
 		long productId = productDiscount.getProduct().getProductId();
 		long discountId = productDiscount.getDiscount().getDiscountId();
-
+		
 		if (productService.productExist(productId)) {
-
+			
 			if (discountService.discountExist(discountId)) {
-
+				
 				if (!discountAlreadyAppliedToProduct(productId, discountId)) {
-
+					
 					productDiscountRepo.save(productDiscount);
 
 					return true;
@@ -180,6 +182,23 @@ public class ProductDiscountService {
 		}
 		
 		return discountedPrice;
+	}
+	
+	public boolean discountTypeAppliedToProduct(long productId, long discountId) {
+		
+		List<Discount> discounts = findDiscountsByProductId(productId);
+		
+		Discount discount = discountService.findByDiscountId(discountId).get();
+		
+		for (int i = 0; i < discounts.size(); i++) {
+			
+			if (discounts.get(i).getDiscountType() == discount.getDiscountType()) {
+				
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 }

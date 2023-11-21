@@ -24,7 +24,7 @@ public class UserClassService {
 	public Admin addAdminUser(Admin admin) {
 		
 		if (findByUserId(admin.getUserId()).isPresent() || usernameExist(admin.getUsername())) {
-			System.out.println("test");
+
 			return null;
 		}
 		

@@ -10,6 +10,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 
 import com.maikro.checkoutSystem.model.Admin;
 import com.maikro.checkoutSystem.model.Discount;
@@ -38,6 +39,7 @@ class ProductDiscountServiceTest {
 	private UserClassService userClassService;
 
 	@Test
+	@DirtiesContext
 	void testAddProductDiscountByProductAndDiscount_ShouldAddProductDiscountInDatabaseByProductIdAndDiscountId_Return1ForTheTest() {
 
 		// create an admin to make a discount
@@ -65,6 +67,7 @@ class ProductDiscountServiceTest {
 	}
 
 	@Test
+	@DirtiesContext
 	void testAddProductDiscountByProductAndDiscount_ShouldNotAddProductDiscountInDatabaseIfDiscountAlreadyAppliedToProduct_OnlyHave1DiscountForProduct() {
 
 		// create an admin to make a discount
@@ -99,7 +102,8 @@ class ProductDiscountServiceTest {
 	}
 
 	@Test
-	void testDiscountAlreadyAppliedToProduct_ShouldReturnTrue_IfDiscountAlreadyAppliedToProduct() {
+	@DirtiesContext
+	void testDiscountAlreadyAppliedToProduct_ForDiscountAlreadyAppliedToProduct_ShouldReturnTrue() {
 
 		// create an admin to make a discount
 		Admin admin = new Admin();
@@ -123,6 +127,7 @@ class ProductDiscountServiceTest {
 	}
 
 	@Test
+	@DirtiesContext
 	void testDiscountAlreadyAppliedToProduct_ShouldReturnFalse_IfDiscountNotYetAppliedToProduct() {
 
 		// create an admin to make a discount
@@ -152,6 +157,7 @@ class ProductDiscountServiceTest {
 	}
 
 	@Test
+	@DirtiesContext
 	void testAddProductDiscount_ShouldAddProductDiscountInDatabaseByProductDiscountObject_ReturnTrueForValidInput() {
 
 		// create an admin to make a discount
@@ -183,6 +189,7 @@ class ProductDiscountServiceTest {
 	}
 
 	@Test
+	@DirtiesContext
 	void testAddProductDiscount_ShouldNotAddProductDiscountInDatabaseIfProductOrDiscountNotInDatabase_ReturnFalseForInvalidInput() {
 
 		// create an admin to make a discount
@@ -213,6 +220,7 @@ class ProductDiscountServiceTest {
 	}
 
 	@Test
+	@DirtiesContext
 	void testAddProductDiscount_ShouldNotAddProductDiscountInDatabaseIfDiscountAlreadyAppliedToProduct_ReturnFalse() {
 
 		// create an admin to make a discount
@@ -249,6 +257,7 @@ class ProductDiscountServiceTest {
 	}
 
 	@Test
+	@DirtiesContext
 	void testFindByProductIdAndDiscountId_ShouldReturnProductDiscountObjectWithProductIdAndDiscountId_CreatedProductDiscountShouldMatchRetrieved() {
 
 		// create an admin to make a discount
@@ -300,6 +309,7 @@ class ProductDiscountServiceTest {
 	}
 
 	@Test
+	@DirtiesContext
 	void testRemoveProductDiscountByProductIdAndDiscountId_ShouldRemoveProductDiscount_ReturnTrueIfProductDiscountExist() {
 
 		// create an admin to make a discount
@@ -333,6 +343,7 @@ class ProductDiscountServiceTest {
 	}
 
 	@Test
+	@DirtiesContext
 	void testRemoveProductDiscountByProductIdAndDiscountId_ShouldReturnFalse_IfProductDiscountIsNotInDatabase() {
 
 		// create an admin to make a discount
@@ -377,6 +388,7 @@ class ProductDiscountServiceTest {
 	}
 
 	@Test
+	@DirtiesContext
 	void testFindDiscountsByProductId_ShouldReturnDiscountsOnProduct() {
 
 		// create an admin to make a discount
@@ -402,7 +414,7 @@ class ProductDiscountServiceTest {
 		ProductDiscount productDiscount2 = new ProductDiscount(product, discount2);
 
 		// add the productDiscount to database
-		productDiscountService.addProductDiscount(productDiscount1);
+		productDiscountService.addProductDiscount(productDiscount1);		
 		productDiscountService.addProductDiscount(productDiscount2);
 		
 		//retrieve all discounts on a product
