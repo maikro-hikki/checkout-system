@@ -8,8 +8,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.maikro.checkoutSystem.constants.ProductType;
 import com.maikro.checkoutSystem.model.Admin;
+import com.maikro.checkoutSystem.model.Product;
 import com.maikro.checkoutSystem.service.AdminService;
+import com.maikro.checkoutSystem.service.ProductService;
 import com.maikro.checkoutSystem.service.UserClassService;
 
 @RestController
@@ -18,33 +21,62 @@ public class AdminRestController {
 
 	@Autowired
 	private AdminService adminService;
-	
+
 	@Autowired
 	private UserClassService userClassService;
 
-//	@PostMapping("/register")
-//	public ResponseEntity<Admin> registerAdmin(@RequestBody Admin admin) {
-//		
-//		Admin createdUser = adminService.addAdminUser(admin);
-//		return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
-//	}
+	@Autowired
+	private ProductService productService;
 
 	@PostMapping("/register")
-	public ResponseEntity<Admin> registerAdmin(@RequestParam String username, @RequestParam String password,
+	public ResponseEntity<String> registerAdmin(@RequestParam String username, @RequestParam String password,
 			@RequestParam String firstName, @RequestParam String lastName) {
-		
-		if (username.isEmpty() || userClassService.usernameExist(username) || password.isEmpty() || firstName.isEmpty() || lastName.isEmpty()) {
-	        // Invalid input data
-//	        return ResponseEntity.badRequest().body(admin);
-	    }
+
+		if (username.isEmpty() || password.isEmpty() || firstName.isEmpty() || lastName.isEmpty()) {
+
+			return new ResponseEntity<>("Please fill out all fields", HttpStatus.BAD_REQUEST);
+		}
+
+		if (userClassService.usernameExist(username)) {
+
+			return new ResponseEntity<>("Username already taken", HttpStatus.CONFLICT);
+		}
 
 		Admin admin = userClassService.addAdminUser(username, password, firstName, lastName);
 
 		if (admin == null) {
-			return new ResponseEntity<>(admin, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("Error occured during registration", HttpStatus.BAD_REQUEST);
 		} else {
-			return new ResponseEntity<>(admin, HttpStatus.CREATED);
+			return new ResponseEntity<>("Admin registered successfully", HttpStatus.CREATED);
 		}
+	}
+
+	@PostMapping("/product")
+	public ResponseEntity<String> addProductToShop(@RequestParam String name, @RequestParam double unitPrice,
+			@RequestParam int remainingQuantity, @RequestParam String productType) {
+
+		if (name.isEmpty() || productType.isEmpty()) {
+
+			return new ResponseEntity<>("Please fill out all fields", HttpStatus.BAD_REQUEST);
+		}
+
+		if (unitPrice < 0) {
+
+			return new ResponseEntity<>("Unit price cannot be less than 0", HttpStatus.BAD_REQUEST);
+		}
+
+		if (remainingQuantity < 0 || (remainingQuantity % 1 != 0)) {
+
+			return new ResponseEntity<>("Quantity cannot be a decimal or less than 0", HttpStatus.BAD_REQUEST);
+		}
+
+		ProductType productEnumType = productService.stringToProductType(productType);
+
+		Product product = new Product(name, unitPrice, remainingQuantity, productEnumType);
+
+		productService.addNewProduct(product);
+
+		return new ResponseEntity<>("Admin registered successfully", HttpStatus.CREATED);
 	}
 
 }

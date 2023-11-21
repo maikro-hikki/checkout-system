@@ -49,6 +49,13 @@ public class Product {
 		this.productDiscount = productDiscount;
 		this.admin = admin;
 	}
+	
+	public Product(String name, double unitPrice, int remainingQuantity, ProductType productType) {
+		this.name = name;
+		this.unitPrice = unitPrice;
+		this.remainingQuantity = remainingQuantity;
+		this.productType = productType;
+	}
 
 	public long getProductId() {
 		return productId;

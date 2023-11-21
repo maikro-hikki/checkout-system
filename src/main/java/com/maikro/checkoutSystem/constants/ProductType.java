@@ -5,7 +5,8 @@ public enum ProductType {
 	TV,
 	COMPUTER,
 	FRIDGE,
-	COOLING
+	COOLING,
+	ELECTRONICS
 	
 }
 

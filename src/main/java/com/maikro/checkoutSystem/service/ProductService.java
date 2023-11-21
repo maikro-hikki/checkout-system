@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.maikro.checkoutSystem.constants.ProductType;
 import com.maikro.checkoutSystem.model.Product;
 import com.maikro.checkoutSystem.repository.ProductRepo;
 
@@ -31,12 +32,28 @@ public class ProductService {
 	}
 
 	public double getProductUnitPrice(long productId) {
-		
+
 		if (productExist(productId)) {
 			return findByProductId(productId).get().getUnitPrice();
 		}
-		
+
 		return -1;
+	}
+
+	public ProductType stringToProductType(String productType) {
+
+		switch (productType) {
+		case "Computer":
+			return ProductType.COMPUTER;
+		case "Cooling":
+			return ProductType.COOLING;
+		case "Fridge":
+			return ProductType.FRIDGE;
+		case "TV":
+			return ProductType.TV;
+		default:
+			return ProductType.ELECTRONICS;
+		}
 	}
 
 }

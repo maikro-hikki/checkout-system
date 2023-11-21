@@ -49,6 +49,14 @@ public class BasketService {
 		return -1;
 	}
 
+	/**
+	 * Adds a product to the basket for a given user.
+	 *
+	 * @param userId    the ID of the user
+	 * @param productId the ID of the product
+	 * @param quantity  the quantity of the product to add
+	 * @return true if the product was successfully added to the basket, false otherwise
+	 */
 	public boolean addProductToBasket(long userId, long productId, int quantity) {
 		
 		if (customerService.customerExist(userId)) {
