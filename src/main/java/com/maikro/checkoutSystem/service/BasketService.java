@@ -50,17 +50,17 @@ public class BasketService {
 	}
 
 	public boolean addProductToBasket(long userId, long productId, int quantity) {
-
+		
 		if (customerService.customerExist(userId)) {
-
+			
 			Customer customer = customerService.findByUserId(userId).get();
-
+			
 			if (productService.productExist(productId)) {
-
+				
 				Product product = productService.findByProductId(productId).get();
 
 				if (quantity <= product.getRemainingQuantity() && quantity > 0) {
-
+					
 					int i = productInCustomerBasket(userId, productId);
 
 					if (i >= 0) {

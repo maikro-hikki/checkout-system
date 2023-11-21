@@ -24,7 +24,7 @@ public class UserClassService {
 	public Admin addAdminUser(Admin admin) {
 		
 		if (findByUserId(admin.getUserId()).isPresent() || usernameExist(admin.getUsername())) {
-
+			
 			return null;
 		}
 		
@@ -32,8 +32,9 @@ public class UserClassService {
 	}
 
 	public Customer addCustomerUser(Customer customer) {
-		
+		System.out.println(customer.getUsername());
 		if (findByUserId(customer.getUserId()).isPresent() || usernameExist(customer.getUsername())) {
+			
 			return null;
 		}
 		

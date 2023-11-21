@@ -15,20 +15,6 @@ import com.maikro.checkoutSystem.service.AdminService;
 @RequestMapping("/api/admin/")
 public class AdminRestController {
 
-//	private final ProductService productService;
-//
-//	private final DiscountService discountService;
-//
-//	private final UserClassService userClassService;
-//
-//	@Autowired
-//	public AdminRestController(ProductService productService, DiscountService discountService,
-//			UserClassService userClassService) {
-//		this.productService = productService;
-//		this.discountService = discountService;
-//		this.userClassService = userClassService;
-//	}
-	
 	@Autowired
 	private AdminService adminService;
 

@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 
 import com.maikro.checkoutSystem.model.Admin;
 import com.maikro.checkoutSystem.model.Product;
@@ -26,6 +27,7 @@ public class ProductServiceTest {
     private UserClassService userClassService;
     
     @Test
+    @DirtiesContext
     public void testAddNewProduct() {
     	
     	//create an admin to make a product
@@ -48,6 +50,7 @@ public class ProductServiceTest {
     }
     
     @Test
+    @DirtiesContext
     public void testRemoveProductById() {
     	
     	//create an admin to make a product
@@ -69,6 +72,7 @@ public class ProductServiceTest {
     }
     
     @Test
+    @DirtiesContext
     public void testDoesProductExistById_For_ExistingProduct() {
     	
     	//create an admin to make a product
@@ -93,6 +97,7 @@ public class ProductServiceTest {
     }
     
     @Test
+    @DirtiesContext
     public void testDoesProductExistById_For_RemovedProduct() {
     	
     	//create an admin to make a product
@@ -112,6 +117,7 @@ public class ProductServiceTest {
     }
     
     @Test
+    @DirtiesContext
     public void testFindByProductId_ShouldReturnSameProduct_ForCalledProductId() {
     	
     	//create an admin to make a product
@@ -131,6 +137,7 @@ public class ProductServiceTest {
     }
     
     @Test
+    @DirtiesContext
     public void testGetProductUnitPrice_ShouldReturnProductUnitPrice_IfProductExist() {
     	
     	//create an admin to make a product
@@ -151,6 +158,7 @@ public class ProductServiceTest {
     }
     
     @Test
+    @DirtiesContext
     public void testGetProductUnitPrice_ShouldReturnNegative1_IfProductDoesntExist() {
     	
     	//create an admin to make a product

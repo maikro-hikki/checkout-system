@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 
 import com.maikro.checkoutSystem.model.Admin;
 import com.maikro.checkoutSystem.model.DiscountByQuantity;
@@ -22,6 +23,7 @@ class DiscountByQuantityServiceTest {
 	private UserClassService userClassService;
 
 	@Test
+	@DirtiesContext
 	void testApplyDiscountByQuantity_InputDiscountIdPrice10AndQuantity5_ShouldReturn10() {
 
 		// create an admin to make a discount
@@ -42,6 +44,7 @@ class DiscountByQuantityServiceTest {
 	}
 	
 	@Test
+	@DirtiesContext
 	void testApplyDiscountByQuantity_InputDiscountIdPrice10AndQuantity5_ShouldReturn5() {
 
 		// create an admin to make a discount
@@ -62,6 +65,7 @@ class DiscountByQuantityServiceTest {
 	}
 	
 	@Test
+	@DirtiesContext
 	void testApplyDiscountByQuantity_InputDiscountIdPrice17AndQuantity5_ShouldReturn12point58() {
 
 		// create an admin to make a discount
