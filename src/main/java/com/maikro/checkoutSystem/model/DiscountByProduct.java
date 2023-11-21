@@ -1,7 +1,5 @@
 package com.maikro.checkoutSystem.model;
 
-import java.util.List;
-
 import com.maikro.checkoutSystem.constants.DiscountType;
 
 import jakarta.persistence.Entity;
@@ -18,9 +16,10 @@ public class DiscountByProduct extends Discount{
 		this.setDiscountType(DiscountType.INDIVIDUAL_PRODUCT);
 	}
 
-	public DiscountByProduct(long discountId, DiscountType discountType, Admin admin,
-			List<ProductDiscount> productDiscount) {
-		super(discountId, discountType, admin, productDiscount);
+	public DiscountByProduct(Admin admin, long discount) {
+		super(admin);
+		this.discount = discount;
+		this.setDiscountType(DiscountType.INDIVIDUAL_PRODUCT);
 	}
 
 	public DiscountByProduct(double discount) {

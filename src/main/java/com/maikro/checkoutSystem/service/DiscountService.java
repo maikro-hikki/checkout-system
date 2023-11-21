@@ -1,7 +1,5 @@
 package com.maikro.checkoutSystem.service;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;

@@ -23,7 +23,7 @@ public class Utility {
 		try {
 			result = Double.parseDouble(input);
 		} catch (NumberFormatException e) {
-			result = Double.MIN_VALUE; // A sentinel value indicating an error
+			result = Double.MIN_VALUE;
 		}
 
 		return result;
@@ -36,7 +36,7 @@ public class Utility {
 		try {
 			result = Integer.parseInt(input);
 		} catch (NumberFormatException e) {
-			result = Integer.MIN_VALUE; // A sentinel value indicating an error
+			result = Integer.MIN_VALUE;
 		}
 
 		return result;
@@ -48,7 +48,7 @@ public class Utility {
         try {
             result = Long.parseLong(input);
         } catch (NumberFormatException e) {
-            result = Long.MIN_VALUE; // A sentinel value indicating an error
+            result = Long.MIN_VALUE;
         }
         
         return result;

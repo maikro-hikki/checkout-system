@@ -14,9 +14,6 @@ public class DiscountByQuantityService {
 
 	@Autowired
 	private DiscountByQuantityRepo discountByQuantityRepo;
-	
-	@Autowired
-	private DiscountService discountService;
 
 	public Optional<DiscountByQuantity> findByDiscountId(long discountId) {
 		return discountByQuantityRepo.findById(discountId);

@@ -1,7 +1,5 @@
 package com.maikro.checkoutSystem.model;
 
-import java.util.List;
-
 import com.maikro.checkoutSystem.constants.DiscountType;
 
 import jakarta.persistence.Entity;
