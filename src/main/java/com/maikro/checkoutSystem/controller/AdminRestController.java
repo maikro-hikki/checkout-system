@@ -4,7 +4,6 @@ import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -20,11 +19,13 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.maikro.checkoutSystem.Utility;
 import com.maikro.checkoutSystem.constants.CustomResponse;
+import com.maikro.checkoutSystem.constants.DiscountType;
 import com.maikro.checkoutSystem.constants.UserType;
 import com.maikro.checkoutSystem.model.Admin;
 import com.maikro.checkoutSystem.model.DiscountByQuantity;
 import com.maikro.checkoutSystem.model.Product;
 import com.maikro.checkoutSystem.service.AdminService;
+import com.maikro.checkoutSystem.service.DiscountService;
 import com.maikro.checkoutSystem.service.ProductService;
 import com.maikro.checkoutSystem.service.UserClassService;
 
@@ -42,6 +43,9 @@ public class AdminRestController {
 
 	@Autowired
 	private ProductService productService;
+	
+	@Autowired
+	private DiscountService discountService;
 
 //	@PostMapping("/register")
 //	public ResponseEntity<String> registerAdmin(@RequestParam String username, @RequestParam String password,
@@ -245,34 +249,93 @@ public class AdminRestController {
 
 	}
 
-	@PostMapping("/discount") //////////////////////////////////
-	public ResponseEntity<String> addDiscountByQuantity(@RequestParam String quantity, @RequestParam String discount) {
+//	@PostMapping("/quantity-discount") //////////////////////////////////
+//	public ResponseEntity<String> addDiscountByQuantity(@RequestParam String quantity, @RequestParam String discount) {
+//
+//		if (quantity.isEmpty() || discount.isEmpty()) {
+//
+//			return new ResponseEntity<>("Please fill out all fields", HttpStatus.BAD_REQUEST);
+//		}
+//
+//		int quantityInt = Utility.convertStringToInt(quantity);
+//		double discountDouble = Utility.convertStringToDouble(discount);
+//
+//		Pageable page;///////////////////////////
+//
+//		if (quantityInt == Integer.MIN_VALUE || quantityInt < 0 || (quantityInt % 1 != 0)) {
+//
+//			return new ResponseEntity<>("Quantity have to be an integer (number without decimals) and not negative",
+//					HttpStatus.BAD_REQUEST);
+//		}
+//
+//		if (discountDouble == Double.MIN_VALUE || discountDouble < 0 || discountDouble > 1) {
+//
+//			return new ResponseEntity<>("Discount have to be between 0 (0%) and 1 (100%) inclusive and not negative",
+//					HttpStatus.BAD_REQUEST);
+//		}
+//
+//		DiscountByQuantity quantityDiscount = new DiscountByQuantity(quantityInt, discountDouble);///////////////////////////
+//
+//		return new ResponseEntity<>("Discount added to database successfully", HttpStatus.CREATED);
+//	}
+	
+	@PostMapping("/{userId}/discunt-by-quantity") //////////////////////////////////
+	public ResponseEntity<CustomResponse<DiscountByQuantity>> addDiscountByQuantity(@Valid @RequestBody DiscountByQuantity discount,
+			BindingResult bindingResult, @PathVariable long userId) {
+		
+		ResponseEntity<CustomResponse<DiscountByQuantity>> initialValidation = Utility.initialObjectValidator(discount, bindingResult);
 
-		if (quantity.isEmpty() || discount.isEmpty()) {
+		if (initialValidation.hasBody()) {
 
-			return new ResponseEntity<>("Please fill out all fields", HttpStatus.BAD_REQUEST);
+			return initialValidation;
 		}
 
-		int quantityInt = Utility.convertStringToInt(quantity);
-		double discountDouble = Utility.convertStringToDouble(discount);
+		CustomResponse<DiscountByQuantity> customResponse = new CustomResponse<>();
+		customResponse.setData(discount);
+		
+		if (discount.getDiscountType() != DiscountType.QUANTITY) {
 
-		Pageable page;///////////////////////////
+			customResponse.setMessage("Only quantity type discount is accepted for this portal");
+			return new ResponseEntity<>(customResponse, HttpStatus.BAD_REQUEST);
+		}
+		
+		if (!adminService.adminExist(userId)) {
 
-		if (quantityInt == Integer.MIN_VALUE || quantityInt < 0 || (quantityInt % 1 != 0)) {
-
-			return new ResponseEntity<>("Quantity have to be an integer (number without decimals) and not negative",
-					HttpStatus.BAD_REQUEST);
+			customResponse.setMessage("User doesn't exist or does not have Admin privilages");
+			return new ResponseEntity<>(customResponse, HttpStatus.FORBIDDEN);
+		}
+		
+		if (discountService.discountExist(discount.getDiscountId())) {
+			
+			customResponse.setMessage("Discount ID already exists");
+			return new ResponseEntity<>(customResponse, HttpStatus.CONFLICT);
 		}
 
-		if (discountDouble == Double.MIN_VALUE || discountDouble < 0 || discountDouble > 1) {
+		int quantity = discount.getQuantity();
+		double discountValue = discount.getDiscount();
 
-			return new ResponseEntity<>("Discount have to be between 0 (0%) and 1 (100%) inclusive and not negative",
-					HttpStatus.BAD_REQUEST);
+		if (quantity < 0 || (quantity % 1 != 0)) {
+
+			customResponse.setMessage("Quantity have to be an integer (number without decimals) and not negative");
+			return new ResponseEntity<>(customResponse, HttpStatus.BAD_REQUEST);
 		}
 
-		DiscountByQuantity quantityDiscount = new DiscountByQuantity(quantityInt, discountDouble);///////////////////////////
+		if (discountValue < 0 || discountValue > 1) {
 
-		return new ResponseEntity<>("Discount added to database successfully", HttpStatus.CREATED);
+			customResponse.setMessage("Discount have to be between 0 (0%) and 1 (100%) inclusive and not negative");
+			return new ResponseEntity<>(customResponse, HttpStatus.BAD_REQUEST);
+		}
+
+		discount.setAdmin(adminService.findByUserId(userId).get());
+		
+		discountService.addDiscountByQuantity(discount);
+		
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(discount.getDiscountId()).toUri();
+		
+		customResponse.setMessage("Successfully added discount-by-quantity: " + discount.getDiscountId() + " (discount ID), by added by Admin user: " + userId + " (user ID)");
+
+		return ResponseEntity.created(location).body(customResponse);
 	}
 
 	@GetMapping("/all-products")
