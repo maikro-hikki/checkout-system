@@ -89,7 +89,7 @@ public class BasketService {
 		return false;
 	}
 
-	public boolean removeProduct(long userId, long productId) {
+	public boolean removeProductFromBasket(long userId, long productId) {
 
 		if (customerService.customerExist(userId)) {
 
@@ -148,6 +148,34 @@ public class BasketService {
 		}
 		
 		return totalCost;
+	}
+	
+	public int deductRemainingQuantityAfterPurchase(long userId) {
+		
+		List<Basket> checkout = findByUserId(userId);
+		
+		for (int i = 0; i < checkout.size(); i++) {
+			
+			Product product = productService.findByProductId(checkout.get(i).getProduct().getProductId()).orElse(null);
+			
+			if (product == null) {
+				return -1;
+			}
+			
+			int boughtQuantity = checkout.get(i).getQuantity();
+			int remainingQuantity = product.getRemainingQuantity();
+			
+			if (boughtQuantity > remainingQuantity) {
+				return -1;
+			}
+			
+			product.setRemainingQuantity(remainingQuantity - boughtQuantity);
+			
+			productService.addNewProduct(product);
+			
+		}
+		
+		return 1;
 	}
 
 }

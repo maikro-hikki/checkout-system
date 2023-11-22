@@ -218,7 +218,7 @@ class BasketServiceTest {
 		basketService.addProductToBasket(customer.getUserId(), product1.getProductId(), 5);
 		basketService.addProductToBasket(customer.getUserId(), product2.getProductId(), 5);
 
-		basketService.removeProduct(customer.getUserId(), product1.getProductId());
+		basketService.removeProductFromBasket(customer.getUserId(), product1.getProductId());
 
 		assertEquals(-1, basketService.productInCustomerBasket(customer.getUserId(), product1.getProductId()));
 		assertTrue(basketService.productInCustomerBasket(customer.getUserId(), product2.getProductId()) >= 0);
