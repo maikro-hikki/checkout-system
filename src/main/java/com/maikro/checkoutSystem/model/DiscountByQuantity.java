@@ -4,13 +4,16 @@ import com.maikro.checkoutSystem.constants.DiscountType;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "discountId")
 public class DiscountByQuantity extends Discount{
 	
+	@NotNull
 	private int quantity;
 	
+	@NotNull
 	private double discount;
 
 	public DiscountByQuantity() {

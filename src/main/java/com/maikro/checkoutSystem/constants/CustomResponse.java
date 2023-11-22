@@ -9,24 +9,24 @@ public class CustomResponse<T> {
 	public CustomResponse() {
 	}
 
-	public CustomResponse(T object, String message) {
-		this.data = object;
+	public CustomResponse(T data, String message) {
+		this.data = data;
 		this.message = message;
 	}
 
-	public T getObject() {
+	public T getData() {
 		return data;
 	}
 
-	public void setObject(T object) {
-		this.data = object;
+	public void setData(T data) {
+		this.data = data;
 	}
 
-	public String getWarningMessage() {
+	public String getMessage() {
 		return message;
 	}
 
-	public void setWarningMessage(String message) {
+	public void setMessage(String message) {
 		this.message = message;
 	}
 

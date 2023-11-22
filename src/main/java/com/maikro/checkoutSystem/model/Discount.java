@@ -5,6 +5,7 @@ import java.util.List;
 import com.maikro.checkoutSystem.constants.DiscountType;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -20,11 +21,11 @@ public abstract class Discount {
 	
 	private DiscountType discountType;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "fk_adminId")
 	private Admin admin;
 	
-	@OneToMany(mappedBy = "discount")
+	@OneToMany(mappedBy = "discount", fetch = FetchType.EAGER)
     private List<ProductDiscount> productDiscount;
 
 	public Discount() {

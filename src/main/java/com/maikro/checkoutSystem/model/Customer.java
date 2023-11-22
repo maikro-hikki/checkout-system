@@ -6,6 +6,7 @@ import com.maikro.checkoutSystem.constants.UserType;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrimaryKeyJoinColumn;
@@ -15,7 +16,7 @@ import jakarta.persistence.PrimaryKeyJoinColumn;
 public class Customer extends UserClass {
 	
 	//customer's shopping basket
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "fk_customerId")
 	private List<Basket> basket;
 

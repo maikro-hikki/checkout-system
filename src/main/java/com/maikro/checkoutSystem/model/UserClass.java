@@ -4,10 +4,14 @@ import com.maikro.checkoutSystem.constants.UserType;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -16,16 +20,21 @@ public abstract class UserClass {
 	@Id
 	@GeneratedValue
 	private long userId;
-
+	
 	@Column(unique = true)
+	@NotBlank
 	private String username;
 
+	@NotBlank
 	private String password;
 
+	@NotBlank
 	private String firstName;
 
+	@NotBlank
 	private String lastName;
 
+	@Enumerated(EnumType.STRING)
 	private UserType userType;
 
 	public UserClass() {
