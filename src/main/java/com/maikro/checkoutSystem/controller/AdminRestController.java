@@ -22,6 +22,8 @@ import com.maikro.checkoutSystem.constants.CustomResponse;
 import com.maikro.checkoutSystem.constants.DiscountType;
 import com.maikro.checkoutSystem.constants.UserType;
 import com.maikro.checkoutSystem.model.Admin;
+import com.maikro.checkoutSystem.model.Discount;
+import com.maikro.checkoutSystem.model.DiscountByProduct;
 import com.maikro.checkoutSystem.model.DiscountByQuantity;
 import com.maikro.checkoutSystem.model.Product;
 import com.maikro.checkoutSystem.service.AdminService;
@@ -279,7 +281,7 @@ public class AdminRestController {
 //		return new ResponseEntity<>("Discount added to database successfully", HttpStatus.CREATED);
 //	}
 	
-	@PostMapping("/{userId}/discunt-by-quantity") //////////////////////////////////
+	@PostMapping("/{userId}/discount-by-quantity")
 	public ResponseEntity<CustomResponse<DiscountByQuantity>> addDiscountByQuantity(@Valid @RequestBody DiscountByQuantity discount,
 			BindingResult bindingResult, @PathVariable long userId) {
 		
@@ -333,9 +335,96 @@ public class AdminRestController {
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(discount.getDiscountId()).toUri();
 		
-		customResponse.setMessage("Successfully added discount-by-quantity: " + discount.getDiscountId() + " (discount ID), by added by Admin user: " + userId + " (user ID)");
+		customResponse.setMessage("Successfully added discount-by-quantity: " + discount.getDiscountId() + " (discount ID), added by Admin user: " + userId + " (user ID)");
 
 		return ResponseEntity.created(location).body(customResponse);
+	}
+	
+	@PostMapping("/{userId}/discount-by-product")
+	public ResponseEntity<CustomResponse<DiscountByProduct>> addDiscountByProduct(@Valid @RequestBody DiscountByProduct discount,
+			BindingResult bindingResult, @PathVariable long userId) {
+		
+		ResponseEntity<CustomResponse<DiscountByProduct>> initialValidation = Utility.initialObjectValidator(discount, bindingResult);
+
+		if (initialValidation.hasBody()) {
+
+			return initialValidation;
+		}
+
+		CustomResponse<DiscountByProduct> customResponse = new CustomResponse<>();
+		customResponse.setData(discount);
+		
+		if (discount.getDiscountType() != DiscountType.INDIVIDUAL_PRODUCT) {
+
+			customResponse.setMessage("Only individual product type discount is accepted for this portal");
+			return new ResponseEntity<>(customResponse, HttpStatus.BAD_REQUEST);
+		}
+		
+		if (!adminService.adminExist(userId)) {
+
+			customResponse.setMessage("User doesn't exist or does not have Admin privilages");
+			return new ResponseEntity<>(customResponse, HttpStatus.FORBIDDEN);
+		}
+		
+		if (discountService.discountExist(discount.getDiscountId())) {
+			
+			customResponse.setMessage("Discount ID already exists");
+			return new ResponseEntity<>(customResponse, HttpStatus.CONFLICT);
+		}
+		
+		double discountValue = discount.getDiscount();
+
+		if (discountValue < 0 || discountValue > 1) {
+
+			customResponse.setMessage("Discount have to be between 0 (0%) and 1 (100%) inclusive and not negative");
+			return new ResponseEntity<>(customResponse, HttpStatus.BAD_REQUEST);
+		}
+
+		discount.setAdmin(adminService.findByUserId(userId).get());
+		
+		discountService.addDiscountByProduct(discount);
+		
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(discount.getDiscountId()).toUri();
+		
+		customResponse.setMessage("Successfully added discount-by-product: " + discount.getDiscountId() + " (discount ID), added by Admin user: " + userId + " (user ID)");
+
+		return ResponseEntity.created(location).body(customResponse);
+	}
+	
+	@DeleteMapping("/delete-discount")
+	public ResponseEntity<CustomResponse<Discount>> removeDiscountFromDatabase(@RequestParam String discountId) {
+
+		CustomResponse<Discount> customResponse = new CustomResponse<>();		
+		
+		if (discountId.isEmpty()) {
+
+			customResponse.setMessage("Please fill out all fields");
+			return new ResponseEntity<>(customResponse, HttpStatus.BAD_REQUEST);
+		}
+
+		long discountIdLong = Utility.convertStringToLong(discountId);
+
+		if (discountIdLong == Long.MIN_VALUE) {
+
+			customResponse.setMessage("Please input a valid discount ID");
+			return new ResponseEntity<>(customResponse, HttpStatus.BAD_REQUEST);
+		}
+		
+		Discount foundDiscount = discountService.findByDiscountId(discountIdLong).orElse(null);
+
+		if (foundDiscount == null) {
+
+			customResponse.setMessage("Discount not found");
+			return new ResponseEntity<>(customResponse, HttpStatus.NOT_FOUND);
+		}
+
+		customResponse.setData(foundDiscount);
+		customResponse.setMessage("Discount deleted successfully");
+		discountService.removeDiscountById(discountIdLong);
+
+		return new ResponseEntity<>(customResponse, HttpStatus.OK);
+
 	}
 
 	@GetMapping("/all-products")

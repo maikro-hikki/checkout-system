@@ -5,6 +5,8 @@ import java.util.List;
 import com.maikro.checkoutSystem.constants.ProductType;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -34,6 +36,7 @@ public class Product {
 	private int remainingQuantity;
 	
 	//type of product
+	@Enumerated(EnumType.STRING)
 	private ProductType productType;
 	
 	@OneToMany(fetch = FetchType.EAGER)

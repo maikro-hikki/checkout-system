@@ -5,9 +5,10 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
-import com.maikro.checkoutSystem.constants.ProductType;
 import com.maikro.checkoutSystem.model.Admin;
-import com.maikro.checkoutSystem.model.Product;
+import com.maikro.checkoutSystem.model.DiscountByProduct;
+import com.maikro.checkoutSystem.model.DiscountByQuantity;
+import com.maikro.checkoutSystem.service.DiscountService;
 import com.maikro.checkoutSystem.service.ProductService;
 import com.maikro.checkoutSystem.service.UserClassService;
 
@@ -19,11 +20,14 @@ public class DataInit implements ApplicationRunner {
 	
 	@Autowired
 	private UserClassService userClassService;
+	
+	@Autowired
+	private DiscountService discountService;
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 		
-		int number = 100;
+		int number = 50;
 		
 		Admin admin = new Admin("admin1", "123", "John", "Doe");
 		
@@ -31,10 +35,14 @@ public class DataInit implements ApplicationRunner {
 		
 		for (int i = 0; i < number; i++) {
 			
-			Product product = new Product("product " + i, i, i, ProductType.ELECTRONICS);
-			product.setAdmin(admin);
+			DiscountByQuantity discount1 = new DiscountByQuantity(admin, i, 0.1);
 			
-			productService.addNewProduct(product);
+			discountService.addDiscountByQuantity(discount1);
+			
+			DiscountByProduct discount2 = new DiscountByProduct(admin, 0.1);
+			
+			discountService.addDiscountByProduct(discount2);
+		
 		}
 		
 	}
