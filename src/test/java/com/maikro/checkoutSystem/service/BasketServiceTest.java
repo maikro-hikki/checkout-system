@@ -2,16 +2,17 @@ package com.maikro.checkoutSystem.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 
+import com.maikro.checkoutSystem.constants.ProductType;
 import com.maikro.checkoutSystem.model.Admin;
 import com.maikro.checkoutSystem.model.Basket;
 import com.maikro.checkoutSystem.model.Customer;
@@ -37,22 +38,48 @@ class BasketServiceTest {
 
 	@Autowired
 	private ProductDiscountService productDiscountService;
+	
+	Admin admin = new Admin("admin", "123", "John", "Doe");
+	Customer customer = new Customer("customer", "123", "John", "Doe");
+	Customer customer1 = new Customer("customer1", "123", "John", "Doe");
+	Customer customer2 = new Customer("customer2", "123", "John", "Doe");
+	Customer customer3 = new Customer("customer3", "123", "John", "Doe");
+	Customer customer4 = new Customer("customer4", "123", "John", "Doe");
+	Customer customer5 = new Customer("customer5", "123", "John", "Doe");
+	DiscountByQuantity discount1 = new DiscountByQuantity(admin, 3, 0.2);
+	DiscountByProduct discount2 = new DiscountByProduct(admin, 0.1);
+	Product product = new Product("Apple TV", 10.5, 50, ProductType.ELECTRONICS);
+	Product product1 = new Product("Apple TV", 5.5, 30, ProductType.ELECTRONICS);
+	Product product2 = new Product("Samsung TV", 20.5, 70, ProductType.ELECTRONICS);
+	
+	
+	
+	
+	@BeforeEach
+	void setUp() {		
+		
+		userClassService.addAdminUser(admin);		
+		userClassService.addCustomerUser(customer);
+		userClassService.addCustomerUser(customer1);
+		userClassService.addCustomerUser(customer2);
+		userClassService.addCustomerUser(customer3);
+		userClassService.addCustomerUser(customer4);
+		userClassService.addCustomerUser(customer5);
+		discountService.addDiscountByQuantity(discount1);
+		discountService.addDiscountByProduct(discount2);
+		product.setAdmin(admin);
+		product1.setAdmin(admin);
+		product2.setAdmin(admin);
+		productService.addNewProduct(product);
+		productService.addNewProduct(product1);
+		productService.addNewProduct(product2);
+		
+	}
 
 	@Test
 	@DirtiesContext
 	void testAddProductToBasket_ShouldReturnTrue_IfSuccessfullyAddedWithValidInputs() {
 
-		Customer customer = new Customer();
-		customer.setUsername("customer1");
-		userClassService.addCustomerUser(customer);
-
-		Admin admin = new Admin();
-		userClassService.addAdminUser(admin);
-
-		Product product = new Product();
-		product.setAdmin(admin);
-		product.setRemainingQuantity(10);
-		productService.addNewProduct(product);
 
 		assertThat(basketService.addProductToBasket(customer.getUserId(), product.getProductId(), 5)).isNotNull();
 
@@ -62,23 +89,16 @@ class BasketServiceTest {
 	@DirtiesContext
 	void testAddProductToBasket_ShouldReturnFalse_IfCustomerOrProductNotInDataBase() {
 
-		Customer customer = new Customer();
-		customer.setUsername("customer1");
+		Product product8 = new Product("Apple TV", 10.5, 50, ProductType.ELECTRONICS);
+		Customer customer8 = new Customer("customer8", "123", "John", "Doe");
 
-		Admin admin = new Admin();
-		userClassService.addAdminUser(admin);
+		assertThat(basketService.addProductToBasket(customer8.getUserId(), product8.getProductId(), 5)).isNull();
 
-		Product product = new Product();
-		product.setAdmin(admin);
-		product.setRemainingQuantity(10);
+		userClassService.addCustomerUser(customer8);
 
-		assertThat(basketService.addProductToBasket(customer.getUserId(), product.getProductId(), 5)).isNull();
+		assertThat(basketService.addProductToBasket(customer8.getUserId(), product8.getProductId(), 5)).isNull();
 
-		userClassService.addCustomerUser(customer);
-
-		assertThat(basketService.addProductToBasket(customer.getUserId(), product.getProductId(), 5)).isNull();
-
-		productService.addNewProduct(product);
+		productService.addNewProduct(product8);
 
 		assertThat(basketService.addProductToBasket(customer.getUserId(), product.getProductId(), 5)).isNotNull();
 
@@ -88,45 +108,17 @@ class BasketServiceTest {
 	@DirtiesContext
 	void testAddProductToBasket_ShouldReturnFalse_IfQuantityIsInvalid() {
 
-		Customer customer1 = new Customer();
-		customer1.setUsername("customer1");
-		userClassService.addCustomerUser(customer1);
-		Customer customer2 = new Customer();
-		customer2.setUsername("customer2");
-		userClassService.addCustomerUser(customer2);
-		Customer customer3 = new Customer();
-		customer3.setUsername("customer3");
-		userClassService.addCustomerUser(customer3);
-		Customer customer4 = new Customer();
-		customer4.setUsername("customer4");
-		userClassService.addCustomerUser(customer4);
-		Customer customer5 = new Customer();
-		customer5.setUsername("customer5");
-		userClassService.addCustomerUser(customer5);
 		
-		Admin admin = new Admin();
-		admin.setUsername("admin1");
-		userClassService.addAdminUser(admin);
 		
-		Product product = new Product();
-		product.setAdmin(admin);
-		product.setRemainingQuantity(10);
-		productService.addNewProduct(product);
-		
-		// valid range: quantity <= 10 && quantity > 0
-		// valid quantity of 5
+		// valid range: quantity <= 50 && quantity > 0
 		assertThat(basketService.addProductToBasket(customer1.getUserId(), product.getProductId(), 5)).isNotNull();
 
-		// invalid quantity -10 < 0
 		assertThat(basketService.addProductToBasket(customer2.getUserId(), product.getProductId(), -10)).isNull();
 
-		// invalid quantity 0 = 0
 		assertThat(basketService.addProductToBasket(customer3.getUserId(), product.getProductId(), 0)).isNull();
 
-		// invalid quantity 20 > 10
-		assertThat(basketService.addProductToBasket(customer4.getUserId(), product.getProductId(), 20)).isNull();
+		assertThat(basketService.addProductToBasket(customer4.getUserId(), product.getProductId(), 100)).isNull();
 
-		// valid quantity 10 = 10
 		assertThat(basketService.addProductToBasket(customer5.getUserId(), product.getProductId(), 10)).isNotNull();
 
 	}
@@ -135,25 +127,6 @@ class BasketServiceTest {
 	@DirtiesContext
 	void testFindByCustomerId_ShouldReturnSameNumberOfItems_AsExpectedNumber() {
 
-		Admin admin = new Admin();
-		userClassService.addAdminUser(admin);
-
-		Product product1 = new Product();
-		product1.setAdmin(admin);
-		product1.setRemainingQuantity(10);
-		productService.addNewProduct(product1);
-
-		Product product2 = new Product();
-		product2.setAdmin(admin);
-		product2.setRemainingQuantity(20);
-		productService.addNewProduct(product2);
-
-		Customer customer1 = new Customer();
-		customer1.setUsername("customer1");
-		userClassService.addCustomerUser(customer1);
-		Customer customer2 = new Customer();
-		customer1.setUsername("customer2");
-		userClassService.addCustomerUser(customer2);
 
 		basketService.addProductToBasket(customer1.getUserId(), product1.getProductId(), 5);
 		basketService.addProductToBasket(customer1.getUserId(), product2.getProductId(), 10);
@@ -168,22 +141,8 @@ class BasketServiceTest {
 	@DirtiesContext
 	void testAddProductToBasket_ShouldIncreaseTheQuantityOfProduct_IfProductAlreadyExists() {
 
-		Customer customer = new Customer();
-		customer.setUsername("customer1");
-		userClassService.addCustomerUser(customer);
 
-		Admin admin = new Admin();
-		userClassService.addAdminUser(admin);
 
-		Product product1 = new Product();
-		product1.setAdmin(admin);
-		product1.setRemainingQuantity(10);
-		productService.addNewProduct(product1);
-
-		Product product2 = new Product();
-		product2.setAdmin(admin);
-		product2.setRemainingQuantity(20);
-		productService.addNewProduct(product2);
 
 		basketService.addProductToBasket(customer.getUserId(), product1.getProductId(), 5);
 		basketService.addProductToBasket(customer.getUserId(), product2.getProductId(), 5);
@@ -199,24 +158,9 @@ class BasketServiceTest {
 	@DirtiesContext
 	void testRemoveProduct_ShouldReturnTrue_IfSuccessfullyRemovedProductFromBasket() {
 
-		Customer customer = new Customer();
-		customer.setUsername("customer1");
-		userClassService.addCustomerUser(customer);
 
-		Admin admin = new Admin();
-		userClassService.addAdminUser(admin);
 
-		Product product1 = new Product();
-		product1.setAdmin(admin);
-		product1.setRemainingQuantity(10);
-		productService.addNewProduct(product1);
-
-		Product product2 = new Product();
-		product2.setAdmin(admin);
-		product2.setRemainingQuantity(20);
-		productService.addNewProduct(product2);
-
-		basketService.addProductToBasket(customer.getUserId(), product1.getProductId(), 5);
+		basketService.addProductToBasket(customer.getUserId(), product1.getProductId(), 10);
 		basketService.addProductToBasket(customer.getUserId(), product2.getProductId(), 5);
 
 		basketService.removeProductFromBasket(customer.getUserId(), product1.getProductId(), 10);
@@ -230,27 +174,6 @@ class BasketServiceTest {
 	@DirtiesContext
 	void testCalculateProductPrice_ShouldReturnPriceAfterDiscountOfProducts_ExpectedResultOf43() {
 
-		Admin admin = new Admin();
-		userClassService.addAdminUser(admin);
-
-		Product product = new Product();
-		product.setAdmin(admin);
-		product.setUnitPrice(10);
-		product.setRemainingQuantity(20);
-		productService.addNewProduct(product);
-
-		// create a quantity discount and set it under the admin
-		DiscountByQuantity discount1 = new DiscountByQuantity();
-		discount1.setAdmin(admin);
-		discount1.setDiscount(0.2);
-		discount1.setQuantity(2);
-		discountService.addDiscountByQuantity(discount1);
-		// create a product discount and set it under the admin
-		DiscountByProduct discount2 = new DiscountByProduct();
-		discount2.setAdmin(admin);
-		discount2.setDiscount(0.3);
-		discountService.addDiscountByProduct(discount2);
-
 		// create new product discount objects
 		ProductDiscount productDiscount1 = new ProductDiscount(product, discount1);
 		ProductDiscount productDiscount2 = new ProductDiscount(product, discount2);
@@ -261,7 +184,7 @@ class BasketServiceTest {
 
 		double finalPrice = basketService.calculateProductPrice(product.getProductId(), 7);
 
-		assertEquals(43, finalPrice);
+		assertEquals(61.95, finalPrice);
 
 	}
 
@@ -269,27 +192,6 @@ class BasketServiceTest {
 	@DirtiesContext
 	void testCalculateProductPrice_ShouldReturnPriceAfterDiscountOfProducts_ExpectedResultOf216() {
 
-		Admin admin = new Admin();
-		userClassService.addAdminUser(admin);
-
-		Product product = new Product();
-		product.setAdmin(admin);
-		product.setUnitPrice(40);
-		product.setRemainingQuantity(20);
-		productService.addNewProduct(product);
-
-		// create a quantity discount and set it under the admin
-		DiscountByQuantity discount1 = new DiscountByQuantity();
-		discount1.setAdmin(admin);
-		discount1.setDiscount(0.1);
-		discount1.setQuantity(3);
-		discountService.addDiscountByQuantity(discount1);
-		// create a product discount and set it under the admin
-		DiscountByProduct discount2 = new DiscountByProduct();
-		discount2.setAdmin(admin);
-		discount2.setDiscount(0.2);
-		discountService.addDiscountByProduct(discount2);
-
 		// create new product discount objects
 		ProductDiscount productDiscount1 = new ProductDiscount(product, discount1);
 		ProductDiscount productDiscount2 = new ProductDiscount(product, discount2);
@@ -300,7 +202,7 @@ class BasketServiceTest {
 
 		double finalPrice = basketService.calculateProductPrice(product.getProductId(), 7);
 
-		assertEquals(216, finalPrice);
+		assertEquals(61.95, finalPrice);
 
 	}
 
@@ -308,36 +210,10 @@ class BasketServiceTest {
 	@DirtiesContext
 	void testCalculateProductPrice_ForProductNotFound_ShouldReturnNegative1() {
 
-		Admin admin = new Admin();
-		userClassService.addAdminUser(admin);
+		Product product7 = new Product("Some TV", 10.5, 10, ProductType.ELECTRONICS);
 
-		// product created but not added to database
-		Product product = new Product();
-		product.setAdmin(admin);
-		product.setUnitPrice(40);
-		product.setRemainingQuantity(20);
-
-		// create a quantity discount and set it under the admin
-		DiscountByQuantity discount1 = new DiscountByQuantity();
-		discount1.setAdmin(admin);
-		discount1.setDiscount(0.1);
-		discount1.setQuantity(3);
-		discountService.addDiscountByQuantity(discount1);
-		// create a product discount and set it under the admin
-		DiscountByProduct discount2 = new DiscountByProduct();
-		discount2.setAdmin(admin);
-		discount2.setDiscount(0.2);
-		discountService.addDiscountByProduct(discount2);
-
-		// create new product discount objects
-		ProductDiscount productDiscount1 = new ProductDiscount(product, discount1);
-		ProductDiscount productDiscount2 = new ProductDiscount(product, discount2);
-
-		// add the productDiscounts to database
-		productDiscountService.addProductDiscount(productDiscount1);
-		productDiscountService.addProductDiscount(productDiscount2);
-
-		double finalPrice = basketService.calculateProductPrice(product.getProductId(), 7);
+		//product 7 was not added to database/doesn't exist
+		double finalPrice = basketService.calculateProductPrice(product7.getProductId(), 7);
 
 		assertEquals(-1, finalPrice);
 
@@ -347,37 +223,23 @@ class BasketServiceTest {
 	@DirtiesContext
 	void testCalculateProductPrice_ForProductUnitPriceLessThan0_ShouldReturnNegative1() {
 
-		Admin admin = new Admin();
-		userClassService.addAdminUser(admin);
 
-		Product product = new Product();
-		product.setAdmin(admin);
+		Product product3 = new Product("LG TV", 30.5, 60, ProductType.ELECTRONICS);
+		product3.setAdmin(admin);
 		// unit price is set to -40 which is less than 0
-		product.setUnitPrice(-40);
-		product.setRemainingQuantity(20);
-		productService.addNewProduct(product);
-
-		// create a quantity discount and set it under the admin
-		DiscountByQuantity discount1 = new DiscountByQuantity();
-		discount1.setAdmin(admin);
-		discount1.setDiscount(0.1);
-		discount1.setQuantity(3);
-		discountService.addDiscountByQuantity(discount1);
-		// create a product discount and set it under the admin
-		DiscountByProduct discount2 = new DiscountByProduct();
-		discount2.setAdmin(admin);
-		discount2.setDiscount(0.2);
-		discountService.addDiscountByProduct(discount2);
+		product3.setUnitPrice(-40);
+		product3.setRemainingQuantity(20);
+		productService.addNewProduct(product3);
 
 		// create new product discount objects
-		ProductDiscount productDiscount1 = new ProductDiscount(product, discount1);
-		ProductDiscount productDiscount2 = new ProductDiscount(product, discount2);
+		ProductDiscount productDiscount1 = new ProductDiscount(product3, discount1);
+		ProductDiscount productDiscount2 = new ProductDiscount(product3, discount2);
 
 		// add the productDiscounts to database
 		productDiscountService.addProductDiscount(productDiscount1);
 		productDiscountService.addProductDiscount(productDiscount2);
 
-		double finalPrice = basketService.calculateProductPrice(product.getProductId(), 7);
+		double finalPrice = basketService.calculateProductPrice(product3.getProductId(), 7);
 
 		assertEquals(-1, finalPrice);
 
@@ -386,27 +248,6 @@ class BasketServiceTest {
 	@Test
 	@DirtiesContext
 	void testCalculateProductPrice_ForQuantityLessThan0_ShouldReturnNegative1() {
-
-		Admin admin = new Admin();
-		userClassService.addAdminUser(admin);
-
-		Product product = new Product();
-		product.setAdmin(admin);
-		product.setUnitPrice(40);
-		product.setRemainingQuantity(20);
-		productService.addNewProduct(product);
-
-		// create a quantity discount and set it under the admin
-		DiscountByQuantity discount1 = new DiscountByQuantity();
-		discount1.setAdmin(admin);
-		discount1.setDiscount(0.1);
-		discount1.setQuantity(3);
-		discountService.addDiscountByQuantity(discount1);
-		// create a product discount and set it under the admin
-		DiscountByProduct discount2 = new DiscountByProduct();
-		discount2.setAdmin(admin);
-		discount2.setDiscount(0.2);
-		discountService.addDiscountByProduct(discount2);
 
 		// create new product discount objects
 		ProductDiscount productDiscount1 = new ProductDiscount(product, discount1);
@@ -427,19 +268,11 @@ class BasketServiceTest {
 	@DirtiesContext
 	void testCalculateProductPrice_ForProductWithoutDiscount_ShouldReturn280() {
 
-		Admin admin = new Admin();
-		userClassService.addAdminUser(admin);
-
-		Product product = new Product();
-		product.setAdmin(admin);
-		product.setUnitPrice(40);
-		product.setRemainingQuantity(20);
-		productService.addNewProduct(product);
 
 		// quantity of 7
 		double finalPrice = basketService.calculateProductPrice(product.getProductId(), 7);
 
-		assertEquals(280, finalPrice);
+		assertEquals(73.5, finalPrice);
 
 	}
 
@@ -447,51 +280,19 @@ class BasketServiceTest {
 	@DirtiesContext
 	void testTotalCostInBasket_ForOneTypeOfProductWithoutDiscount_ShouldReturn200() {
 
-		Admin admin = new Admin();
-		userClassService.addAdminUser(admin);
-
-		Customer customer = new Customer();
-		customer.setUsername("customer1");
-		userClassService.addCustomerUser(customer);
-
-		Product product = new Product();
-		product.setAdmin(admin);
-		product.setUnitPrice(40);
-		product.setRemainingQuantity(20);
-		productService.addNewProduct(product);
 
 		basketService.addProductToBasket(customer.getUserId(), product.getProductId(), 5);
 
 		// quantity of 7
 		double totalPrice = basketService.totalCostInBasket(customer.getUserId());
 
-		assertEquals(200, totalPrice);
+		assertEquals(52.50, totalPrice);
 
 	}
 
 	@Test
 	@DirtiesContext
 	void testTotalCostInBasket_ForOneTypeOfProductWithOneDiscount_ShouldReturn272() {
-
-		Admin admin = new Admin();
-		userClassService.addAdminUser(admin);
-
-		Customer customer = new Customer();
-		customer.setUsername("customer1");
-		userClassService.addCustomerUser(customer);
-
-		Product product = new Product();
-		product.setAdmin(admin);
-		product.setUnitPrice(40);
-		product.setRemainingQuantity(20);
-		productService.addNewProduct(product);
-
-		// create a quantity discount and set it under the admin
-		DiscountByQuantity discount1 = new DiscountByQuantity();
-		discount1.setAdmin(admin);
-		discount1.setDiscount(0.1);
-		discount1.setQuantity(3);
-		discountService.addDiscountByQuantity(discount1);
 
 		// create new product discount objects
 		ProductDiscount productDiscount1 = new ProductDiscount(product, discount1);
@@ -504,38 +305,13 @@ class BasketServiceTest {
 		// quantity of 7
 		double totalPrice = basketService.totalCostInBasket(customer.getUserId());
 
-		assertEquals(272, totalPrice);
+		assertEquals(69.30, totalPrice);
 
 	}
 
 	@Test
 	@DirtiesContext
 	void testTotalCostInBasket_ForOneTypeOfProductWithTwoDiscounts_ShouldReturn172() {
-
-		Admin admin = new Admin();
-		userClassService.addAdminUser(admin);
-
-		Customer customer = new Customer();
-		customer.setUsername("customer1");
-		userClassService.addCustomerUser(customer);
-
-		Product product = new Product();
-		product.setAdmin(admin);
-		product.setUnitPrice(40);
-		product.setRemainingQuantity(20);
-		productService.addNewProduct(product);
-
-		// create a quantity discount and set it under the admin
-		DiscountByQuantity discount1 = new DiscountByQuantity();
-		discount1.setAdmin(admin);
-		discount1.setDiscount(0.2);
-		discount1.setQuantity(2);
-		discountService.addDiscountByQuantity(discount1);
-		// create a product discount and set it under the admin
-		DiscountByProduct discount2 = new DiscountByProduct();
-		discount2.setAdmin(admin);
-		discount2.setDiscount(0.3);
-		discountService.addDiscountByProduct(discount2);
 
 		// create new product discount objects
 		ProductDiscount productDiscount1 = new ProductDiscount(product, discount1);
@@ -550,7 +326,7 @@ class BasketServiceTest {
 		// quantity of 7
 		double totalPrice = basketService.totalCostInBasket(customer.getUserId());
 
-		assertEquals(172, totalPrice);
+		assertEquals(61.95, totalPrice);
 
 	}
 
@@ -558,69 +334,19 @@ class BasketServiceTest {
 	@DirtiesContext
 	void testTotalCostInBasket_ForTwoTypeOfProductWithoutDiscount_ShouldReturn260() {
 
-		Admin admin = new Admin();
-		userClassService.addAdminUser(admin);
-
-		Customer customer = new Customer();
-		customer.setUsername("customer1");
-		userClassService.addCustomerUser(customer);
-
-		Product product1 = new Product();
-		product1.setAdmin(admin);
-		product1.setUnitPrice(40);
-		product1.setRemainingQuantity(20);
-		productService.addNewProduct(product1);
-
-		Product product2 = new Product();
-		product2.setAdmin(admin);
-		product2.setUnitPrice(30);
-		product2.setRemainingQuantity(20);
-		productService.addNewProduct(product2);
-
 		basketService.addProductToBasket(customer.getUserId(), product1.getProductId(), 5);
 		basketService.addProductToBasket(customer.getUserId(), product2.getProductId(), 2);
 
 		// quantity of 7
 		double totalPrice = basketService.totalCostInBasket(customer.getUserId());
 
-		assertEquals(260, totalPrice);
+		assertEquals(68.5, totalPrice);
 
 	}
 
 	@Test
 	@DirtiesContext
 	void testTotalCostInBasket_ForTwoTypeOfProductWithOneHavingTwoDiscounts_ShouldReturn232() {
-
-		Admin admin = new Admin();
-		userClassService.addAdminUser(admin);
-
-		Customer customer = new Customer();
-		customer.setUsername("customer1");
-		userClassService.addCustomerUser(customer);
-
-		Product product1 = new Product();
-		product1.setAdmin(admin);
-		product1.setUnitPrice(40);
-		product1.setRemainingQuantity(20);
-		productService.addNewProduct(product1);
-
-		Product product2 = new Product();
-		product2.setAdmin(admin);
-		product2.setUnitPrice(30);
-		product2.setRemainingQuantity(20);
-		productService.addNewProduct(product2);
-
-		// create a quantity discount and set it under the admin
-		DiscountByQuantity discount1 = new DiscountByQuantity();
-		discount1.setAdmin(admin);
-		discount1.setDiscount(0.2);
-		discount1.setQuantity(2);
-		discountService.addDiscountByQuantity(discount1);
-		// create a product discount and set it under the admin
-		DiscountByProduct discount2 = new DiscountByProduct();
-		discount2.setAdmin(admin);
-		discount2.setDiscount(0.3);
-		discountService.addDiscountByProduct(discount2);
 
 		// create new product discount objects
 		ProductDiscount productDiscount1 = new ProductDiscount(product1, discount1);
@@ -636,7 +362,7 @@ class BasketServiceTest {
 		// quantity of 7
 		double totalPrice = basketService.totalCostInBasket(customer.getUserId());
 
-		assertEquals(232, totalPrice);
+		assertEquals(73.45, totalPrice);
 
 	}
 
@@ -644,36 +370,6 @@ class BasketServiceTest {
 	@DirtiesContext
 	void testTotalCostInBasket_ForTwoTypeOfProductWithBothHavingTwoDiscounts_ShouldReturn280() {
 
-		Admin admin = new Admin();
-		userClassService.addAdminUser(admin);
-
-		Customer customer = new Customer();
-		customer.setUsername("customer1");
-		userClassService.addCustomerUser(customer);
-
-		Product product1 = new Product();
-		product1.setAdmin(admin);
-		product1.setUnitPrice(40);
-		product1.setRemainingQuantity(20);
-		productService.addNewProduct(product1);
-
-		Product product2 = new Product();
-		product2.setAdmin(admin);
-		product2.setUnitPrice(30);
-		product2.setRemainingQuantity(20);
-		productService.addNewProduct(product2);
-
-		// create a quantity discount and set it under the admin
-		DiscountByQuantity discount1 = new DiscountByQuantity();
-		discount1.setAdmin(admin);
-		discount1.setDiscount(0.2);
-		discount1.setQuantity(2);
-		discountService.addDiscountByQuantity(discount1);
-		// create a product discount and set it under the admin
-		DiscountByProduct discount2 = new DiscountByProduct();
-		discount2.setAdmin(admin);
-		discount2.setDiscount(0.3);
-		discountService.addDiscountByProduct(discount2);
 
 		// create new product discount objects
 		ProductDiscount productDiscount1 = new ProductDiscount(product1, discount1);
@@ -693,7 +389,7 @@ class BasketServiceTest {
 		// quantity of 7
 		double totalPrice = basketService.totalCostInBasket(customer.getUserId());
 
-		assertEquals(280, totalPrice);
+		assertEquals(134.95, totalPrice);
 
 	}
 

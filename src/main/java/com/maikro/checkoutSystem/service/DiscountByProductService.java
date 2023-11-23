@@ -33,7 +33,7 @@ public class DiscountByProductService {
 			
 			discountedValue = discountedValue * discountAmount;
 			
-			return Utility.roundToTwoDecimals(discountedValue);
+			return discountedValue;
 		}
 		
 		return -1;

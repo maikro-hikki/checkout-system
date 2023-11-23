@@ -40,7 +40,7 @@ public class DiscountByQuantityService {
 			//value of discount received for the productQuantity of the price
 			discountedValue = (price * discountAmount) * numberOfDiscounts;
 
-			return Utility.roundToTwoDecimals(discountedValue);
+			return discountedValue;
 		}
 
 		return -1;

@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.maikro.checkoutSystem.Utility;
 import com.maikro.checkoutSystem.model.Basket;
 import com.maikro.checkoutSystem.model.Customer;
 import com.maikro.checkoutSystem.model.Discount;
@@ -146,14 +147,14 @@ public class BasketService {
 
 		if (discounts.isEmpty()) {
 
-			return productUnitPrice * quantity;
+			return Utility.roundToTwoDecimals(productUnitPrice * quantity);
 		}
 
 		// calculate final price after adding discounts
 		double finalProductPrice = productDiscountService.applyDiscounts(productUnitPrice, discounts, quantity);
 
 		// returns final price, or -1 if there are error
-		return finalProductPrice;
+		return Utility.roundToTwoDecimals(finalProductPrice);
 	}
 
 	public double totalCostInBasket(long userId) {
@@ -172,7 +173,7 @@ public class BasketService {
 			totalCost += productCost;
 		}
 
-		return totalCost;
+		return Utility.roundToTwoDecimals(totalCost);
 	}
 
 	public int deductRemainingQuantityAfterPurchase(long userId) {
