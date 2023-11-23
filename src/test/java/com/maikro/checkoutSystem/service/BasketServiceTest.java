@@ -38,7 +38,7 @@ class BasketServiceTest {
 
 	@Autowired
 	private ProductDiscountService productDiscountService;
-	
+
 	Admin admin = new Admin("admin", "123", "John", "Doe");
 	Customer customer = new Customer("customer", "123", "John", "Doe");
 	Customer customer1 = new Customer("customer1", "123", "John", "Doe");
@@ -51,14 +51,11 @@ class BasketServiceTest {
 	Product product = new Product("Apple TV", 10.5, 50, ProductType.ELECTRONICS);
 	Product product1 = new Product("Apple TV", 5.5, 30, ProductType.ELECTRONICS);
 	Product product2 = new Product("Samsung TV", 20.5, 70, ProductType.ELECTRONICS);
-	
-	
-	
-	
+
 	@BeforeEach
-	void setUp() {		
-		
-		userClassService.addAdminUser(admin);		
+	void setUp() {
+
+		userClassService.addAdminUser(admin);
 		userClassService.addCustomerUser(customer);
 		userClassService.addCustomerUser(customer1);
 		userClassService.addCustomerUser(customer2);
@@ -73,13 +70,12 @@ class BasketServiceTest {
 		productService.addNewProduct(product);
 		productService.addNewProduct(product1);
 		productService.addNewProduct(product2);
-		
+
 	}
 
 	@Test
 	@DirtiesContext
 	void testAddProductToBasket_ShouldReturnTrue_IfSuccessfullyAddedWithValidInputs() {
-
 
 		assertThat(basketService.addProductToBasket(customer.getUserId(), product.getProductId(), 5)).isNotNull();
 
@@ -108,8 +104,6 @@ class BasketServiceTest {
 	@DirtiesContext
 	void testAddProductToBasket_ShouldReturnFalse_IfQuantityIsInvalid() {
 
-		
-		
 		// valid range: quantity <= 50 && quantity > 0
 		assertThat(basketService.addProductToBasket(customer1.getUserId(), product.getProductId(), 5)).isNotNull();
 
@@ -127,7 +121,6 @@ class BasketServiceTest {
 	@DirtiesContext
 	void testFindByCustomerId_ShouldReturnSameNumberOfItems_AsExpectedNumber() {
 
-
 		basketService.addProductToBasket(customer1.getUserId(), product1.getProductId(), 5);
 		basketService.addProductToBasket(customer1.getUserId(), product2.getProductId(), 10);
 		basketService.addProductToBasket(customer2.getUserId(), product2.getProductId(), 2);
@@ -140,9 +133,6 @@ class BasketServiceTest {
 	@Test
 	@DirtiesContext
 	void testAddProductToBasket_ShouldIncreaseTheQuantityOfProduct_IfProductAlreadyExists() {
-
-
-
 
 		basketService.addProductToBasket(customer.getUserId(), product1.getProductId(), 5);
 		basketService.addProductToBasket(customer.getUserId(), product2.getProductId(), 5);
@@ -158,8 +148,6 @@ class BasketServiceTest {
 	@DirtiesContext
 	void testRemoveProduct_ShouldReturnTrue_IfSuccessfullyRemovedProductFromBasket() {
 
-
-
 		basketService.addProductToBasket(customer.getUserId(), product1.getProductId(), 10);
 		basketService.addProductToBasket(customer.getUserId(), product2.getProductId(), 5);
 
@@ -172,7 +160,7 @@ class BasketServiceTest {
 
 	@Test
 	@DirtiesContext
-	void testCalculateProductPrice_ShouldReturnPriceAfterDiscountOfProducts_ExpectedResultOf43() {
+	void testCalculateProductPrice_ShouldReturnPriceAfterDiscountOfProducts_ExpectedResultOf61Point95() {
 
 		// create new product discount objects
 		ProductDiscount productDiscount1 = new ProductDiscount(product, discount1);
@@ -185,25 +173,6 @@ class BasketServiceTest {
 		double finalPrice = basketService.calculateProductPrice(product.getProductId(), 7);
 
 		assertEquals(61.95, finalPrice);
-
-	}
-
-	@Test
-	@DirtiesContext
-	void testCalculateProductPrice_ShouldReturnPriceAfterDiscountOfProducts_ExpectedResultOf216() {
-
-		// create new product discount objects
-		ProductDiscount productDiscount1 = new ProductDiscount(product, discount1);
-		ProductDiscount productDiscount2 = new ProductDiscount(product, discount2);
-
-		// add the productDiscounts to database
-		productDiscountService.addProductDiscount(productDiscount1);
-		productDiscountService.addProductDiscount(productDiscount2);
-
-		double finalPrice = basketService.calculateProductPrice(product.getProductId(), 7);
-
-		assertEquals(61.95, finalPrice);
-
 	}
 
 	@Test
@@ -212,7 +181,7 @@ class BasketServiceTest {
 
 		Product product7 = new Product("Some TV", 10.5, 10, ProductType.ELECTRONICS);
 
-		//product 7 was not added to database/doesn't exist
+		// product 7 was not added to database/doesn't exist
 		double finalPrice = basketService.calculateProductPrice(product7.getProductId(), 7);
 
 		assertEquals(-1, finalPrice);
@@ -222,7 +191,6 @@ class BasketServiceTest {
 	@Test
 	@DirtiesContext
 	void testCalculateProductPrice_ForProductUnitPriceLessThan0_ShouldReturnNegative1() {
-
 
 		Product product3 = new Product("LG TV", 30.5, 60, ProductType.ELECTRONICS);
 		product3.setAdmin(admin);
@@ -266,10 +234,8 @@ class BasketServiceTest {
 
 	@Test
 	@DirtiesContext
-	void testCalculateProductPrice_ForProductWithoutDiscount_ShouldReturn280() {
+	void testCalculateProductPrice_ForProductWithoutDiscount_ShouldReturn73Point5() {
 
-
-		// quantity of 7
 		double finalPrice = basketService.calculateProductPrice(product.getProductId(), 7);
 
 		assertEquals(73.5, finalPrice);
@@ -278,8 +244,7 @@ class BasketServiceTest {
 
 	@Test
 	@DirtiesContext
-	void testTotalCostInBasket_ForOneTypeOfProductWithoutDiscount_ShouldReturn200() {
-
+	void testTotalCostInBasket_ForOneTypeOfProductWithoutDiscount_ShouldReturn52Point50() {
 
 		basketService.addProductToBasket(customer.getUserId(), product.getProductId(), 5);
 
@@ -292,7 +257,7 @@ class BasketServiceTest {
 
 	@Test
 	@DirtiesContext
-	void testTotalCostInBasket_ForOneTypeOfProductWithOneDiscount_ShouldReturn272() {
+	void testTotalCostInBasket_ForOneTypeOfProductWithOneDiscount_ShouldReturn69Point30() {
 
 		// create new product discount objects
 		ProductDiscount productDiscount1 = new ProductDiscount(product, discount1);
@@ -311,7 +276,7 @@ class BasketServiceTest {
 
 	@Test
 	@DirtiesContext
-	void testTotalCostInBasket_ForOneTypeOfProductWithTwoDiscounts_ShouldReturn172() {
+	void testTotalCostInBasket_ForOneTypeOfProductWithTwoDiscounts_ShouldReturn61Point95() {
 
 		// create new product discount objects
 		ProductDiscount productDiscount1 = new ProductDiscount(product, discount1);
@@ -332,7 +297,7 @@ class BasketServiceTest {
 
 	@Test
 	@DirtiesContext
-	void testTotalCostInBasket_ForTwoTypeOfProductWithoutDiscount_ShouldReturn260() {
+	void testTotalCostInBasket_ForTwoTypeOfProductWithoutDiscount_ShouldReturn68Point5() {
 
 		basketService.addProductToBasket(customer.getUserId(), product1.getProductId(), 5);
 		basketService.addProductToBasket(customer.getUserId(), product2.getProductId(), 2);
@@ -346,7 +311,7 @@ class BasketServiceTest {
 
 	@Test
 	@DirtiesContext
-	void testTotalCostInBasket_ForTwoTypeOfProductWithOneHavingTwoDiscounts_ShouldReturn232() {
+	void testTotalCostInBasket_ForTwoTypeOfProductWithOneHavingTwoDiscounts_ShouldReturn73Point45() {
 
 		// create new product discount objects
 		ProductDiscount productDiscount1 = new ProductDiscount(product1, discount1);
@@ -368,8 +333,7 @@ class BasketServiceTest {
 
 	@Test
 	@DirtiesContext
-	void testTotalCostInBasket_ForTwoTypeOfProductWithBothHavingTwoDiscounts_ShouldReturn280() {
-
+	void testTotalCostInBasket_ForTwoTypeOfProductWithBothHavingTwoDiscounts_ShouldReturn134Point95() {
 
 		// create new product discount objects
 		ProductDiscount productDiscount1 = new ProductDiscount(product1, discount1);
