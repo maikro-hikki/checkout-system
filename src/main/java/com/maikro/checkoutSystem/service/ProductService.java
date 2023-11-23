@@ -61,7 +61,7 @@ public class ProductService {
 		}
 	}
 
-	public Page<Product> findProductWithPagination(int offset, int pageSize) {
+	public Page<Product> findAllProductWithPagination(int offset, int pageSize) {
 
 		// added
 		Pageable pageable = PageRequest.of(offset, pageSize);

@@ -1,5 +1,8 @@
 package com.maikro.checkoutSystem.model;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -17,11 +20,13 @@ public class Basket {
 	// product in the basket
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "fk_productId")
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Product product;
 
 	// the customer the basket belongs to
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "fk_customerId")
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Customer customer;
 
 	// quantity of product in the basket

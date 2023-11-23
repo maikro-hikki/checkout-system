@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.maikro.checkoutSystem.constants.DiscountType;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -30,9 +31,6 @@ public abstract class Discount {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "fk_adminId")
 	private Admin admin;
-	
-	@OneToMany(mappedBy = "discount", fetch = FetchType.EAGER)
-    private List<ProductDiscount> productDiscount;
 
 	public Discount() {
 	}
@@ -63,14 +61,6 @@ public abstract class Discount {
 
 	public void setAdmin(Admin admin) {
 		this.admin = admin;
-	}
-
-	public List<ProductDiscount> getProductDiscount() {
-		return productDiscount;
-	}
-
-	public void setProductDiscount(List<ProductDiscount> productDiscount) {
-		this.productDiscount = productDiscount;
 	}
 	
 }

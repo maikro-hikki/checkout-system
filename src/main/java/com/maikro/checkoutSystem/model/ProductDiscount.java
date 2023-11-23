@@ -1,5 +1,8 @@
 package com.maikro.checkoutSystem.model;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -16,10 +19,12 @@ public class ProductDiscount {
 	
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "productId")
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Product product;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "discountId")
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Discount discount;
 
 	public ProductDiscount() {

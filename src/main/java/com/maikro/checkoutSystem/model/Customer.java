@@ -16,7 +16,7 @@ import jakarta.persistence.PrimaryKeyJoinColumn;
 public class Customer extends UserClass {
 	
 	//customer's shopping basket
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
 	@JoinColumn(name = "fk_customerId")
 	private List<Basket> basket;
 
