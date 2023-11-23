@@ -7,9 +7,12 @@ import org.springframework.stereotype.Component;
 
 import com.maikro.checkoutSystem.constants.ProductType;
 import com.maikro.checkoutSystem.model.Admin;
+import com.maikro.checkoutSystem.model.Basket;
+import com.maikro.checkoutSystem.model.Customer;
 import com.maikro.checkoutSystem.model.DiscountByProduct;
 import com.maikro.checkoutSystem.model.DiscountByQuantity;
 import com.maikro.checkoutSystem.model.Product;
+import com.maikro.checkoutSystem.service.BasketService;
 import com.maikro.checkoutSystem.service.DiscountService;
 import com.maikro.checkoutSystem.service.ProductService;
 import com.maikro.checkoutSystem.service.UserClassService;
@@ -25,6 +28,9 @@ public class DataInit implements ApplicationRunner {
 
 	@Autowired
 	private DiscountService discountService;
+	
+	@Autowired
+	private BasketService basketService;
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
@@ -32,8 +38,12 @@ public class DataInit implements ApplicationRunner {
 		int number = 50;
 
 		Admin admin = new Admin("admin1", "123", "John", "Doe");
-
+		Admin admin2 = new Admin("admin2", "123", "John", "Doe");
+		Customer customer1 = new Customer("customer2", "123", "John", "Doe");
+		
 		userClassService.addAdminUser(admin);
+		userClassService.addAdminUser(admin2);
+		userClassService.addCustomerUser(customer1);
 
 		for (int i = 0; i < number; i++) {
 
@@ -51,9 +61,11 @@ public class DataInit implements ApplicationRunner {
 
 			Product product = new Product("Apple TV", i, i, ProductType.ELECTRONICS);
 			product.setAdmin(admin);
+			product.setRemainingQuantity(50);
 
 			productService.addNewProduct(product);
-
+			
+			basketService.addProductToBasket(customer1.getUserId(), product.getProductId(), 50);
 		}
 
 	}

@@ -1,5 +1,6 @@
 package com.maikro.checkoutSystem.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -53,7 +54,7 @@ class BasketServiceTest {
 		product.setRemainingQuantity(10);
 		productService.addNewProduct(product);
 
-		assertTrue(basketService.addProductToBasket(customer.getUserId(), product.getProductId(), 5));
+		assertThat(basketService.addProductToBasket(customer.getUserId(), product.getProductId(), 5)).isNotNull();
 
 	}
 
@@ -71,15 +72,15 @@ class BasketServiceTest {
 		product.setAdmin(admin);
 		product.setRemainingQuantity(10);
 
-		assertFalse(basketService.addProductToBasket(customer.getUserId(), product.getProductId(), 5));
+		assertThat(basketService.addProductToBasket(customer.getUserId(), product.getProductId(), 5)).isNull();
 
 		userClassService.addCustomerUser(customer);
 
-		assertFalse(basketService.addProductToBasket(customer.getUserId(), product.getProductId(), 5));
+		assertThat(basketService.addProductToBasket(customer.getUserId(), product.getProductId(), 5)).isNull();
 
 		productService.addNewProduct(product);
 
-		assertTrue(basketService.addProductToBasket(customer.getUserId(), product.getProductId(), 5));
+		assertThat(basketService.addProductToBasket(customer.getUserId(), product.getProductId(), 5)).isNotNull();
 
 	}
 
@@ -114,19 +115,19 @@ class BasketServiceTest {
 		
 		// valid range: quantity <= 10 && quantity > 0
 		// valid quantity of 5
-		assertTrue(basketService.addProductToBasket(customer1.getUserId(), product.getProductId(), 5));
+		assertThat(basketService.addProductToBasket(customer1.getUserId(), product.getProductId(), 5)).isNotNull();
 
 		// invalid quantity -10 < 0
-		assertFalse(basketService.addProductToBasket(customer2.getUserId(), product.getProductId(), -10));
+		assertThat(basketService.addProductToBasket(customer2.getUserId(), product.getProductId(), -10)).isNull();
 
 		// invalid quantity 0 = 0
-		assertFalse(basketService.addProductToBasket(customer3.getUserId(), product.getProductId(), 0));
+		assertThat(basketService.addProductToBasket(customer3.getUserId(), product.getProductId(), 0)).isNull();
 
 		// invalid quantity 20 > 10
-		assertFalse(basketService.addProductToBasket(customer4.getUserId(), product.getProductId(), 20));
+		assertThat(basketService.addProductToBasket(customer4.getUserId(), product.getProductId(), 20)).isNull();
 
 		// valid quantity 10 = 10
-		assertTrue(basketService.addProductToBasket(customer5.getUserId(), product.getProductId(), 10));
+		assertThat(basketService.addProductToBasket(customer5.getUserId(), product.getProductId(), 10)).isNotNull();
 
 	}
 
@@ -218,7 +219,7 @@ class BasketServiceTest {
 		basketService.addProductToBasket(customer.getUserId(), product1.getProductId(), 5);
 		basketService.addProductToBasket(customer.getUserId(), product2.getProductId(), 5);
 
-		basketService.removeProductFromBasket(customer.getUserId(), product1.getProductId());
+		basketService.removeProductFromBasket(customer.getUserId(), product1.getProductId(), 10);
 
 		assertEquals(-1, basketService.productInCustomerBasket(customer.getUserId(), product1.getProductId()));
 		assertTrue(basketService.productInCustomerBasket(customer.getUserId(), product2.getProductId()) >= 0);
@@ -576,10 +577,8 @@ class BasketServiceTest {
 		product2.setRemainingQuantity(20);
 		productService.addNewProduct(product2);
 
-		boolean result1 = basketService.addProductToBasket(customer.getUserId(), product1.getProductId(), 5);
-		System.out.println(result1);
-		boolean result2 = basketService.addProductToBasket(customer.getUserId(), product2.getProductId(), 2);
-		System.out.println(result2);
+		basketService.addProductToBasket(customer.getUserId(), product1.getProductId(), 5);
+		basketService.addProductToBasket(customer.getUserId(), product2.getProductId(), 2);
 
 		// quantity of 7
 		double totalPrice = basketService.totalCostInBasket(customer.getUserId());

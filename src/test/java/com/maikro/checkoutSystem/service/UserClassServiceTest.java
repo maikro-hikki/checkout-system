@@ -28,7 +28,7 @@ class UserClassServiceTest {
 	void testAddAdminUser_ForValidUsernameAdmin_ShouldReturnSavedAdminObjectAndAddToDatabase() {
 
 		// create an admin
-		Admin admin = new Admin(UserType.ADMIN);
+		Admin admin = new Admin();
 		admin.setUsername("admin1");
 
 		// save admin user using the service method
@@ -52,11 +52,11 @@ class UserClassServiceTest {
 	void testAddAdminUser_ForInvalidUsernameAdmin_ShouldReturnNullObjectAndNotAddToDatabase() {
 
 		// create an admin
-		Admin admin = new Admin(UserType.ADMIN);
+		Admin admin = new Admin();
 		admin.setUsername("admin2");
 
 		// create an admin
-		Admin admin2 = new Admin(UserType.ADMIN);
+		Admin admin2 = new Admin();
 		admin2.setUsername("admin2");
 
 		// save admin user using the service method
@@ -77,7 +77,7 @@ class UserClassServiceTest {
 	void testAddCustomerUser_ForValidUsernameCustomer_ShouldReturnSavedCustomerObjectAndAddToDatabase() {
 
 		// create a customer
-		Customer customer = new Customer(UserType.CUSTOMER);
+		Customer customer = new Customer();
 		customer.setUsername("customer1");
 
 		// save customer user using the service method
@@ -101,11 +101,11 @@ class UserClassServiceTest {
 	void testAddCustomerUser_ForInvalidUsernameCustomer_ShouldReturnNullObjectAndNotAddToDatabase() {
 
 		// create an admin
-		Customer customer = new Customer(UserType.ADMIN);
+		Customer customer = new Customer();
 		customer.setUsername("customer3333");
 
 		// create an admin
-		Customer customer2 = new Customer(UserType.ADMIN);
+		Customer customer2 = new Customer();
 		customer2.setUsername("customer3333");
 
 		// save admin user using the service method
@@ -126,7 +126,7 @@ class UserClassServiceTest {
 	void testRemoveByUserId_ForExistingAdmin_ShouldReturn1AndRemoveAdminUser() {
 
 		// create an admin
-		Admin admin = new Admin(UserType.ADMIN);
+		Admin admin = new Admin();
 		admin.setUsername("admin3");
 
 		// save admin user using the service method
@@ -149,7 +149,7 @@ class UserClassServiceTest {
 	void testRemoveByUserId_ForExistingCustomer_ShouldReturn1AndRemoveFromDatabase() {
 
 		// create a customer
-		Customer customer = new Customer(UserType.CUSTOMER);
+		Customer customer = new Customer();
 		customer.setUsername("customer2");
 
 		// save customer user using the service method
@@ -182,7 +182,7 @@ class UserClassServiceTest {
 	void testIsCustomer_ForCustomer_ShouldReturnTrue() {
 
 		// create a customer
-		Customer customer = new Customer(UserType.CUSTOMER);
+		Customer customer = new Customer();
 		customer.setUsername("customer3");
 
 		// save customer user using the service method
@@ -196,7 +196,7 @@ class UserClassServiceTest {
 	void testIsCustomer_ForAdmin_ShouldReturnFalse() {
 
 		// create an admin
-		Admin admin = new Admin(UserType.ADMIN);
+		Admin admin = new Admin();
 		admin.setUsername("admin4");
 
 		// save admin user using the service method
@@ -210,7 +210,7 @@ class UserClassServiceTest {
 	void testIsAdmin_ForAdmin_ShouldReturnTrue() {
 
 		// create an admin
-		Admin admin = new Admin(UserType.ADMIN);
+		Admin admin = new Admin();
 		admin.setUsername("admin5");
 
 		// save admin user using the service method
@@ -224,7 +224,7 @@ class UserClassServiceTest {
 	void testIsAdmin_ForCustomer_ShouldReturnFalse() {
 
 		// create a customer
-		Customer customer = new Customer(UserType.CUSTOMER);
+		Customer customer = new Customer();
 		customer.setUsername("customer4");
 
 		// save customer user using the service method

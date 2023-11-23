@@ -105,7 +105,7 @@ public class AdminRestController {
 
 		if (userClassService.usernameExist(admin.getUsername())) {
 
-			customResponse.setMessage("User ID already exists");
+			customResponse.setMessage("Username already exists");
 			return new ResponseEntity<>(customResponse, HttpStatus.CONFLICT);
 		}
 

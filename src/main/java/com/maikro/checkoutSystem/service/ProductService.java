@@ -75,13 +75,9 @@ public class ProductService {
 		}
 
 		return products;
-
-//		Page<Product> products = productRepo.findAll(PageRequest.of(offset, pageSize));
-//
-//		return products;
 	}
 
-	public List<Product> findAllProductdSorted(String field) {
+	public List<Product> findAllProductsSorted(String field) {
 
 		return productRepo.findAll(Sort.by(Sort.Direction.ASC, field));
 	}
