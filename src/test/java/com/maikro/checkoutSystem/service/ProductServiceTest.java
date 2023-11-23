@@ -5,12 +5,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 
+import com.maikro.checkoutSystem.constants.ProductType;
 import com.maikro.checkoutSystem.model.Admin;
+import com.maikro.checkoutSystem.model.Customer;
+import com.maikro.checkoutSystem.model.DiscountByProduct;
+import com.maikro.checkoutSystem.model.DiscountByQuantity;
 import com.maikro.checkoutSystem.model.Product;
 import com.maikro.checkoutSystem.repository.ProductRepo;
 
@@ -26,19 +31,27 @@ public class ProductServiceTest {
     @Autowired
     private UserClassService userClassService;
     
+    Admin admin = new Admin("admin", "123", "John", "Doe");
+	Product product = new Product("Apple TV", 10.5, 50, ProductType.ELECTRONICS);
+	Product product1 = new Product("Apple TV", 5.5, 30, ProductType.ELECTRONICS);
+	Product product2 = new Product("Samsung TV", 20.5, 70, ProductType.ELECTRONICS);
+
+	@BeforeEach
+	void setUp() {
+
+		userClassService.addAdminUser(admin);
+		product.setAdmin(admin);
+		product1.setAdmin(admin);
+		product2.setAdmin(admin);
+		productService.addNewProduct(product);
+		productService.addNewProduct(product1);
+		productService.addNewProduct(product2);
+
+	}
+    
     @Test
     @DirtiesContext
     public void testAddNewProduct() {
-    	
-    	//create an admin to make a product
-    	Admin admin = new Admin();
-    	userClassService.addAdminUser(admin);
-    	//create a product and set it under the admin
-        Product product = new Product();
-        product.setAdmin(admin);
-        
-        //add the created product into the repository
-        productService.addNewProduct(product);
         
         //use the productRepo.findById method to find product in repo
         Product savedProduct = productRepo.findById(product.getProductId()).orElse(null);
@@ -52,16 +65,6 @@ public class ProductServiceTest {
     @Test
     @DirtiesContext
     public void testRemoveProductById() {
-    	
-    	//create an admin to make a product
-    	Admin admin = new Admin();
-    	userClassService.addAdminUser(admin);
-    	//create a product and set it under the admin
-        Product product = new Product();
-        product.setAdmin(admin);
-        
-        //add the created product into the repository
-        productService.addNewProduct(product);
         
         //call the method to remove the product
         productService.removeProductById(product.getProductId());
@@ -74,16 +77,6 @@ public class ProductServiceTest {
     @Test
     @DirtiesContext
     public void testDoesProductExistById_For_ExistingProduct() {
-    	
-    	//create an admin to make a product
-    	Admin admin = new Admin();
-    	userClassService.addAdminUser(admin);
-    	//create a product and set it under the admin
-        Product product = new Product();
-        product.setAdmin(admin);
-        
-        //add the created product into the repository
-        productService.addNewProduct(product);
         
         //check if the method can find the existing product
         assertTrue(productService.productExist(product.getProductId()));
@@ -92,24 +85,18 @@ public class ProductServiceTest {
     @Test
     public void testDoesProductExistById_For_NonExistingProduct() {
     	
+    	//not saved to database
+    	Product product7 = new Product("Some TV", 10.5, 10, ProductType.ELECTRONICS);
+    	
         //check if the method cannot find the non-existing product
-        assertFalse(productService.productExist(123456789));
+        assertFalse(productService.productExist(product7.getProductId()));
     }
     
     @Test
     @DirtiesContext
     public void testDoesProductExistById_For_RemovedProduct() {
-    	
-    	//create an admin to make a product
-    	Admin admin = new Admin();
-    	userClassService.addAdminUser(admin);
-    	//create a product and set it under the admin
-        Product product = new Product();
-        product.setAdmin(admin);
-        
-        //add the created product into the repository
-        productService.addNewProduct(product);
-        //remove the product
+
+    	//remove the product
         productService.removeProductById(product.getProductId());
         
         //check if the method cannot find the removed product
@@ -120,15 +107,6 @@ public class ProductServiceTest {
     @DirtiesContext
     public void testFindByProductId_ShouldReturnSameProduct_ForCalledProductId() {
     	
-    	//create an admin to make a product
-    	Admin admin = new Admin();
-    	userClassService.addAdminUser(admin);
-    	//create a product and set it under the admin
-        Product product = new Product();
-        product.setAdmin(admin);
-        
-        //add the created product into the repository
-        productService.addNewProduct(product);
         //find the product by productId
         Product foundProduct = productService.findByProductId(product.getProductId()).get();
         
@@ -140,37 +118,22 @@ public class ProductServiceTest {
     @DirtiesContext
     public void testGetProductUnitPrice_ShouldReturnProductUnitPrice_IfProductExist() {
     	
-    	//create an admin to make a product
-    	Admin admin = new Admin();
-    	userClassService.addAdminUser(admin);
-    	//create a product and set it under the admin
-        Product product = new Product();
-        product.setAdmin(admin);
-        product.setUnitPrice(10.07);
-        
-        //add the created product into the repository
-        productService.addNewProduct(product);
         //get unit price of the product by productId
         double unitPrice = productService.getProductUnitPrice(product.getProductId());
         
         //check if the unit price is the same as the expected unit price
-        assertEquals(10.07, unitPrice);
+        assertEquals(10.5, unitPrice);
     }
     
     @Test
     @DirtiesContext
     public void testGetProductUnitPrice_ShouldReturnNegative1_IfProductDoesntExist() {
     	
-    	//create an admin to make a product
-    	Admin admin = new Admin();
-    	userClassService.addAdminUser(admin);
-    	//create a product and set it under the admin
-        Product product = new Product();
-        product.setAdmin(admin);
-        product.setUnitPrice(10.07);
+    	// not added to database/does not exist
+    			Product product7 = new Product("Some TV", 10.5, 10, ProductType.ELECTRONICS);
         
         //find the product by productId which was not added to the database
-        double unitPrice = productService.getProductUnitPrice(product.getProductId());
+        double unitPrice = productService.getProductUnitPrice(product7.getProductId());
         
         //check if the output is -1 since product is not in the database
         assertEquals(-1, unitPrice);

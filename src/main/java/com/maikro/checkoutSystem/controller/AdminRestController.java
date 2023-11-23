@@ -54,29 +54,6 @@ public class AdminRestController {
 	@Autowired
 	private ProductDiscountService productDiscountService;
 
-//	@PostMapping("/register")
-//	public ResponseEntity<String> registerAdmin(@RequestParam String username, @RequestParam String password,
-//			@RequestParam String firstName, @RequestParam String lastName) {
-//
-//		if (username.isEmpty() || password.isEmpty() || firstName.isEmpty() || lastName.isEmpty()) {
-//
-//			return new ResponseEntity<>("Please fill out all fields", HttpStatus.BAD_REQUEST);
-//		}
-//
-//		if (userClassService.usernameExist(username)) {
-//
-//			return new ResponseEntity<>("Username already taken", HttpStatus.CONFLICT);
-//		}
-//
-//		Admin admin = userClassService.addAdminUser(username, password, firstName, lastName);
-//
-//		if (admin == null) {
-//			return new ResponseEntity<>("Error occured during registration", HttpStatus.BAD_REQUEST);
-//		} else {
-//			return new ResponseEntity<>("Admin registered successfully", HttpStatus.CREATED);
-//		}
-//	}
-
 	@PostMapping("/register")
 	public ResponseEntity<CustomResponse<Admin>> registerAdmin(@Valid @RequestBody Admin admin,
 			BindingResult bindingResult) {
@@ -125,47 +102,6 @@ public class AdminRestController {
 			return ResponseEntity.created(location).body(customResponse);
 		}
 	}
-
-//	@PostMapping("/{userId}/product")
-//	public ResponseEntity<String> addProductToShop(@PathVariable long userId, @RequestParam String name,
-//			@RequestParam String unitPrice, @RequestParam String remainingQuantity, @RequestParam String productType) {
-//
-//		if (!adminService.adminExist(userId)) {
-//
-//			return new ResponseEntity<>("Only Admins can add products", HttpStatus.FORBIDDEN);
-//		}
-//
-//		if (name.isEmpty() || unitPrice.isEmpty() || remainingQuantity.isEmpty() || productType.isEmpty()) {
-//
-//			return new ResponseEntity<>("Please fill out all fields", HttpStatus.BAD_REQUEST);
-//		}
-//
-//		double unitPriceDouble = Utility.convertStringToDouble(unitPrice);
-//		int remainingQuantityInt = Utility.convertStringToInt(remainingQuantity);
-//
-//		if (unitPriceDouble == Double.MIN_VALUE || unitPriceDouble < 0) {
-//
-//			return new ResponseEntity<>("Unit price have to be a number and not negative", HttpStatus.BAD_REQUEST);
-//		}
-//
-//		if (remainingQuantityInt == Integer.MIN_VALUE || remainingQuantityInt < 0 || (remainingQuantityInt % 1 != 0)) {
-//
-//			return new ResponseEntity<>("Quantity have to be an integer (number without decimals) and not negative",
-//					HttpStatus.BAD_REQUEST);
-//		}
-//
-//		ProductType productEnumType = productService.stringToProductType(productType);
-//
-//		Product product = new Product(name, unitPriceDouble, remainingQuantityInt, productEnumType);
-//
-//		productService.addNewProduct(product);
-//
-//		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-//				.buildAndExpand(product.getProductId()).toUri();
-//
-//		return ResponseEntity.created(location)
-//				.body("Successfully added product: " + product.getName() + " ID: " + product.getProductId());
-//	}
 
 	@PostMapping("/{userId}/product")
 	public ResponseEntity<CustomResponse<Product>> addProductToShop(@Valid @RequestBody Product product,
@@ -255,36 +191,6 @@ public class AdminRestController {
 		return new ResponseEntity<>(customResponse, HttpStatus.OK);
 
 	}
-
-//	@PostMapping("/quantity-discount") //////////////////////////////////
-//	public ResponseEntity<String> addDiscountByQuantity(@RequestParam String quantity, @RequestParam String discount) {
-//
-//		if (quantity.isEmpty() || discount.isEmpty()) {
-//
-//			return new ResponseEntity<>("Please fill out all fields", HttpStatus.BAD_REQUEST);
-//		}
-//
-//		int quantityInt = Utility.convertStringToInt(quantity);
-//		double discountDouble = Utility.convertStringToDouble(discount);
-//
-//		Pageable page;///////////////////////////
-//
-//		if (quantityInt == Integer.MIN_VALUE || quantityInt < 0 || (quantityInt % 1 != 0)) {
-//
-//			return new ResponseEntity<>("Quantity have to be an integer (number without decimals) and not negative",
-//					HttpStatus.BAD_REQUEST);
-//		}
-//
-//		if (discountDouble == Double.MIN_VALUE || discountDouble < 0 || discountDouble > 1) {
-//
-//			return new ResponseEntity<>("Discount have to be between 0 (0%) and 1 (100%) inclusive and not negative",
-//					HttpStatus.BAD_REQUEST);
-//		}
-//
-//		DiscountByQuantity quantityDiscount = new DiscountByQuantity(quantityInt, discountDouble);///////////////////////////
-//
-//		return new ResponseEntity<>("Discount added to database successfully", HttpStatus.CREATED);
-//	}
 
 	@PostMapping("/{userId}/discount-by-quantity")
 	public ResponseEntity<CustomResponse<DiscountByQuantity>> addDiscountByQuantity(

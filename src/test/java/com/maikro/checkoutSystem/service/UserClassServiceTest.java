@@ -5,13 +5,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.maikro.checkoutSystem.constants.ProductType;
 import com.maikro.checkoutSystem.constants.UserType;
 import com.maikro.checkoutSystem.model.Admin;
 import com.maikro.checkoutSystem.model.Customer;
+import com.maikro.checkoutSystem.model.DiscountByProduct;
+import com.maikro.checkoutSystem.model.DiscountByQuantity;
+import com.maikro.checkoutSystem.model.Product;
 import com.maikro.checkoutSystem.model.UserClass;
 import com.maikro.checkoutSystem.repository.UserClassRepo;
 
@@ -28,8 +33,7 @@ class UserClassServiceTest {
 	void testAddAdminUser_ForValidUsernameAdmin_ShouldReturnSavedAdminObjectAndAddToDatabase() {
 
 		// create an admin
-		Admin admin = new Admin();
-		admin.setUsername("admin1");
+		Admin admin = new Admin("admin", "123", "John", "Doe");
 
 		// save admin user using the service method
 		Admin savedAdmin = userClassService.addAdminUser(admin);
@@ -52,12 +56,10 @@ class UserClassServiceTest {
 	void testAddAdminUser_ForInvalidUsernameAdmin_ShouldReturnNullObjectAndNotAddToDatabase() {
 
 		// create an admin
-		Admin admin = new Admin();
-		admin.setUsername("admin2");
+		Admin admin = new Admin("admin2", "123", "John", "Doe");
 
 		// create an admin
-		Admin admin2 = new Admin();
-		admin2.setUsername("admin2");
+		Admin admin2 = new Admin("admin2", "123", "John", "Doe");
 
 		// save admin user using the service method
 		userClassService.addAdminUser(admin);
@@ -77,8 +79,7 @@ class UserClassServiceTest {
 	void testAddCustomerUser_ForValidUsernameCustomer_ShouldReturnSavedCustomerObjectAndAddToDatabase() {
 
 		// create a customer
-		Customer customer = new Customer();
-		customer.setUsername("customer1");
+		Customer customer = new Customer("customer", "123", "John", "Doe");
 
 		// save customer user using the service method
 		Customer savedCustomer = userClassService.addCustomerUser(customer);
@@ -101,12 +102,10 @@ class UserClassServiceTest {
 	void testAddCustomerUser_ForInvalidUsernameCustomer_ShouldReturnNullObjectAndNotAddToDatabase() {
 
 		// create an admin
-		Customer customer = new Customer();
-		customer.setUsername("customer3333");
+		Customer customer = new Customer("customer1", "123", "John", "Doe");
 
 		// create an admin
-		Customer customer2 = new Customer();
-		customer2.setUsername("customer3333");
+		Customer customer2 = new Customer("customer2", "123", "John", "Doe");
 
 		// save admin user using the service method
 		userClassService.addCustomerUser(customer);
@@ -126,8 +125,7 @@ class UserClassServiceTest {
 	void testRemoveByUserId_ForExistingAdmin_ShouldReturn1AndRemoveAdminUser() {
 
 		// create an admin
-		Admin admin = new Admin();
-		admin.setUsername("admin3");
+		Admin admin = new Admin("admin4", "123", "John", "Doe");
 
 		// save admin user using the service method
 		userClassService.addAdminUser(admin);
@@ -149,8 +147,7 @@ class UserClassServiceTest {
 	void testRemoveByUserId_ForExistingCustomer_ShouldReturn1AndRemoveFromDatabase() {
 
 		// create a customer
-		Customer customer = new Customer();
-		customer.setUsername("customer2");
+		Customer customer = new Customer("customer3", "123", "John", "Doe");
 
 		// save customer user using the service method
 		userClassService.addCustomerUser(customer);
@@ -182,8 +179,7 @@ class UserClassServiceTest {
 	void testIsCustomer_ForCustomer_ShouldReturnTrue() {
 
 		// create a customer
-		Customer customer = new Customer();
-		customer.setUsername("customer3");
+		Customer customer = new Customer("customer4", "123", "John", "Doe");
 
 		// save customer user using the service method
 		userClassService.addCustomerUser(customer);
@@ -196,8 +192,7 @@ class UserClassServiceTest {
 	void testIsCustomer_ForAdmin_ShouldReturnFalse() {
 
 		// create an admin
-		Admin admin = new Admin();
-		admin.setUsername("admin4");
+		Admin admin = new Admin("admin5", "123", "John", "Doe");
 
 		// save admin user using the service method
 		userClassService.addAdminUser(admin);
@@ -210,8 +205,7 @@ class UserClassServiceTest {
 	void testIsAdmin_ForAdmin_ShouldReturnTrue() {
 
 		// create an admin
-		Admin admin = new Admin();
-		admin.setUsername("admin5");
+		Admin admin = new Admin("admin6", "123", "John", "Doe");
 
 		// save admin user using the service method
 		userClassService.addAdminUser(admin);
@@ -224,8 +218,7 @@ class UserClassServiceTest {
 	void testIsAdmin_ForCustomer_ShouldReturnFalse() {
 
 		// create a customer
-		Customer customer = new Customer();
-		customer.setUsername("customer4");
+		Customer customer = new Customer("customer5", "123", "John", "Doe");
 
 		// save customer user using the service method
 		userClassService.addCustomerUser(customer);
@@ -237,8 +230,7 @@ class UserClassServiceTest {
 	@Test
 	void testUsernameExist_ForExistingUsername_ShouldReturnTrue() {
 
-		Customer user = new Customer();
-		user.setUsername("customer5");
+		Customer user = new Customer("customer6", "123", "John", "Doe");
 
 		userClassService.addCustomerUser(user);
 
@@ -254,8 +246,7 @@ class UserClassServiceTest {
 	@Test
 	void testUsernameExist_ForDeletedUser_ShouldReturnFalse() {
 
-		Customer user = new Customer();
-		user.setUsername("customer6");
+		Customer user = new Customer("customer7", "123", "John", "Doe");
 
 		userClassService.addCustomerUser(user);
 
