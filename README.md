@@ -8,7 +8,8 @@
 - JUnit (for testing service methods)
 - Rest Assured (for testing Rest endpoints)
 ---
-- To start the app, go into the project folder and use the command line `mvn spring-boot:run`
+- To start the program, go into the project folder and use the command line `mvn spring-boot:run`
+- To stop the program, just Ctrl-C
 - To run all tests, go into the project folder and use the command line `mvn test`
 ---
 ### Rest endpoint features:
