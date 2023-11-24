@@ -82,6 +82,7 @@ class AdminRestControllerTest {
 	void testAddProductToShop_ForValidInputs_ShouldReturnCreatedHttpStatusAndAddToDatabase() {
 
 		Product product = new Product("Vacum ABC", 10.5, 50, ProductType.ELECTRONICS);
+		
 
 		given().contentType("application/json")
 			.body(product)
@@ -90,7 +91,7 @@ class AdminRestControllerTest {
 			.then()
 				.statusCode(HttpStatus.CREATED.value())
 					.body("data.name", equalTo(product.getName()))
-					.body("data.unitPrice", equalTo(product.getUnitPrice()));
+					.body("data.unitPrice", equalTo(10.5F));
 
 	}
 }
