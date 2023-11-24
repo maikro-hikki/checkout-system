@@ -34,7 +34,7 @@ public class DataInit implements ApplicationRunner {
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-
+		
 		int number = 50;
 
 		Admin admin = new Admin("admin1", "123", "John", "Doe");
