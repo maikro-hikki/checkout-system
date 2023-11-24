@@ -32,14 +32,35 @@ public class BasketService {
 	@Autowired
 	private ProductDiscountService productDiscountService;
 
+	/**
+	 * Retrieves a basket by its ID.
+	 *
+	 * @param basketId the ID of the basket
+	 * @return an Optional containing the Basket if found, or an empty Optional if
+	 *         not found
+	 */
 	public Optional<Basket> findByBasketId(long basketId) {
 		return basketRepo.findById(basketId);
 	}
 
+	/**
+	 * Retrieves a list of baskets by user ID.
+	 *
+	 * @param userId the ID of the user
+	 * @return a list of Baskets associated with the user
+	 */
 	public List<Basket> findByUserId(long userId) {
 		return basketRepo.findByCustomerUserId(userId);
 	}
 
+	/**
+	 * Checks if a product with the given ID exists in the customer's basket.
+	 *
+	 * @param userId    the ID of the user
+	 * @param productId the ID of the product
+	 * @return the index of the product in the customer's basket if found, -1
+	 *         otherwise
+	 */
 	public int productInCustomerBasket(long userId, long productId) {
 
 		List<Basket> retrievedBasket = findByUserId(userId);
@@ -54,6 +75,12 @@ public class BasketService {
 		return -1;
 	}
 
+	/**
+	 * Adds a basket object relating a UserClass object to a Product object.
+	 *
+	 * @param basket the basket to be added
+	 * @return the added Basket
+	 */
 	public Basket addBasket(Basket basket) {
 
 		return basketRepo.save(basket);
@@ -98,6 +125,15 @@ public class BasketService {
 		return null;
 	}
 
+	/**
+	 * Removes a product from the basket for a given user.
+	 *
+	 * @param userId    the ID of the user
+	 * @param productId the ID of the product
+	 * @param quantity  the quantity of the product to remove
+	 * @return true if the product was successfully removed from the basket, false
+	 *         otherwise
+	 */
 	public boolean removeProductFromBasket(long userId, long productId, int quantity) {
 
 		if (customerService.customerExist(userId)) {
@@ -131,6 +167,14 @@ public class BasketService {
 		return false;
 	}
 
+	/**
+	 * Calculates the price of a product based on its ID and quantity, and any
+	 * discounts applied to product.
+	 *
+	 * @param productId the ID of the product
+	 * @param quantity  the quantity of the product
+	 * @return the calculated price of the product, or -1 if there was an error
+	 */
 	public double calculateProductPrice(long productId, int quantity) {
 
 		// get unit price of product
@@ -157,6 +201,13 @@ public class BasketService {
 		return Utility.roundToTwoDecimals(finalProductPrice);
 	}
 
+	/**
+	 * Calculates the total cost of all products in the basket for a given user.
+	 *
+	 * @param userId the ID of the user
+	 * @return the total cost of all products in the basket, rounded to two decimal
+	 *         places
+	 */
 	public double totalCostInBasket(long userId) {
 
 		double totalCost = 0;
@@ -164,9 +215,10 @@ public class BasketService {
 		List<Basket> basket = findByUserId(userId);
 
 		for (int i = 0; i < basket.size(); i++) {
-			
-			double productCost = calculateProductPrice(basket.get(i).getProduct().getProductId(), basket.get(i).getQuantity());
-			
+
+			double productCost = calculateProductPrice(basket.get(i).getProduct().getProductId(),
+					basket.get(i).getQuantity());
+
 			if (productCost < 0) {
 				continue;
 			}
@@ -176,6 +228,13 @@ public class BasketService {
 		return Utility.roundToTwoDecimals(totalCost);
 	}
 
+	/**
+	 * Deducts the remaining quantity of products after a purchase is made.
+	 *
+	 * @param userId the ID of the user
+	 * @return 1 if the remaining quantity was successfully deducted, -1 if there
+	 *         was an error
+	 */
 	public int deductRemainingQuantityAfterPurchase(long userId) {
 
 		List<Basket> checkout = findByUserId(userId);
@@ -204,6 +263,14 @@ public class BasketService {
 		return 1;
 	}
 
+	/**
+	 * Retrieves a paginated list of basket items for a given user.
+	 *
+	 * @param userId   the ID of the user
+	 * @param offset   the offset of the page
+	 * @param pageSize the size of the page
+	 * @return a Page object containing the basket items for the requested page
+	 */
 	public Page<Basket> findAllBasketItemsWithPagination(long userId, int offset, int pageSize) {
 
 		List<Basket> basketItems = basketRepo.findByCustomerUserId(userId);

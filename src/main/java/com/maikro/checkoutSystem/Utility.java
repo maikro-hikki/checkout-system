@@ -13,6 +13,9 @@ import org.springframework.validation.ObjectError;
 
 import com.maikro.checkoutSystem.constants.CustomResponse;
 
+/**
+ * Utility class containing various helper methods.
+ */
 public class Utility {
 
 	/**

@@ -9,18 +9,33 @@ import com.maikro.checkoutSystem.Utility;
 import com.maikro.checkoutSystem.model.DiscountByProduct;
 import com.maikro.checkoutSystem.repository.DiscountByProductRepo;
 
+/**
+ * Service class for managing discount type for individual product.
+ */
 @Service
 public class DiscountByProductService {
 	
 	@Autowired
 	private DiscountByProductRepo discountByProductRepo;
 
+	/**
+	 * Retrieves an individual product type discount by its ID.
+	 *
+	 * @param discountId the ID of the discount
+	 * @return an Optional containing the DiscountByProduct if found, or an empty Optional if not found
+	 */
 	public Optional<DiscountByProduct> findByDiscountId(long discountId) {
 		return discountByProductRepo.findById(discountId);
 	}
 	
-	//returns the value of only the discounted amount from the unit price
-	//inputs: discountId, price of product (normally unit price), quantity of product
+	/**
+	 * Calculates the amount of discount for a product based on the discount ID, price, and quantity.
+	 *
+	 * @param discountId      the ID of the discount
+	 * @param price           the price of the product (normally the unit price)
+	 * @param productQuantity the quantity of the product
+	 * @return the amount of discount for the product, or -1 if the discount is not found
+	 */
 	public double amountOfDiscount(long discountId, double price, int productQuantity) {
 		
 		double discountedValue = price * productQuantity;
