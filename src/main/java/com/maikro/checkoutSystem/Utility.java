@@ -15,6 +15,12 @@ import com.maikro.checkoutSystem.constants.CustomResponse;
 
 public class Utility {
 
+	/**
+	 * Rounds a given double number to two decimal places.
+	 *
+	 * @param number the number to be rounded
+	 * @return the rounded number with two decimal places
+	 */
 	public static double roundToTwoDecimals(double number) {
 
 		DecimalFormat decimalFormat = new DecimalFormat("#.##");
@@ -26,6 +32,12 @@ public class Utility {
 		return roundedNumber;
 	}
 
+	/**
+	 * Converts a string representation of a number to a double.
+	 *
+	 * @param input the string representation of the number
+	 * @return the converted double value, or Double.MIN_VALUE if the conversion fails
+	 */
 	public static double convertStringToDouble(String input) {
 
 		double result;
@@ -39,6 +51,12 @@ public class Utility {
 		return result;
 	}
 
+	/**
+	 * Converts a string representation of a number to an integer.
+	 *
+	 * @param input the string representation of the number
+	 * @return the converted integer value, or Integer.MIN_VALUE if the conversion fails
+	 */
 	public static int convertStringToInt(String input) {
 
 		int result;
@@ -52,6 +70,12 @@ public class Utility {
 		return result;
 	}
 
+	/**
+	 * Converts a string representation of a number to an integer.
+	 *
+	 * @param input the string representation of the number
+	 * @return the converted integer value, or Integer.MIN_VALUE if the conversion fails
+	 */
 	public static long convertStringToLong(String input) {
 		long result;
 
@@ -64,6 +88,14 @@ public class Utility {
 		return result;
 	}
 
+	/**
+	 * Validates an initial object and returns an appropriate ResponseEntity with a CustomResponse object.
+	 *
+	 * @param <T> the type of the object being validated
+	 * @param object the object to be validated
+	 * @param bindingResult the BindingResult object containing the validation errors
+	 * @return a ResponseEntity containing a CustomResponse object with the validation result
+	 */
 	public static <T> ResponseEntity<CustomResponse<T>> initialObjectValidator(T object, BindingResult bindingResult) {
 		
 		CustomResponse<T> customResponse = new CustomResponse<>();
