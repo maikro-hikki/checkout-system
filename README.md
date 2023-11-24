@@ -1,7 +1,4 @@
 # Back-end system of a store with checkout-system
-- To start the app, go into the project folder and use the command line `mvn spring-boot:run`
-- To run all tests, go into the project folder and use the command line `mvn test`
----
 ### Tech stack used:
 - Spring Boot
 - Rest API
@@ -10,6 +7,9 @@
 ### Testing tech stack used:
 - JUnit (for testing service methods)
 - Rest Assured (for testing Rest endpoints)
+---
+- To start the app, go into the project folder and use the command line `mvn spring-boot:run`
+- To run all tests, go into the project folder and use the command line `mvn test`
 ---
 ### Rest endpoint features:
 - Adding admin/customer users
