@@ -12,6 +12,9 @@ import com.maikro.checkoutSystem.model.Product;
 import com.maikro.checkoutSystem.model.ProductDiscount;
 import com.maikro.checkoutSystem.repository.ProductDiscountRepo;
 
+/**
+ * Service class for managing product discounts.
+ */
 @Service
 public class ProductDiscountService {
 
@@ -30,14 +33,33 @@ public class ProductDiscountService {
 	@Autowired
 	private DiscountByQuantityService discountByQuantityService;
 
+	/**
+	 * Retrieves a product discount by its ID.
+	 *
+	 * @param productDiscountId the ID of the product discount
+	 * @return an Optional containing the ProductDiscount if found, or an empty Optional if not found
+	 */
 	public Optional<ProductDiscount> findByProductDiscountId(long productDiscountId) {
 		return productDiscountRepo.findById(productDiscountId);
 	}
 
+	/**
+	 * Retrieves all product discounts for a given product.
+	 *
+	 * @param productId the ID of the product
+	 * @return a list of ProductDiscount objects associated with the product
+	 */
 	public List<ProductDiscount> findByProductId(long productId) {
 		return productDiscountRepo.findByProductProductId(productId);
 	}
 
+	/**
+	 * Retrieves a specific product discount by the product and discount IDs.
+	 *
+	 * @param productId  the ID of the product
+	 * @param discountId the ID of the discount
+	 * @return the ProductDiscount matching the product and discount IDs, or null if not found
+	 */
 	public ProductDiscount findByProductIdAndDiscountId(long productId, long discountId) {
 
 		if (productService.productExist(productId)) {
@@ -57,6 +79,13 @@ public class ProductDiscountService {
 		return null;
 	}
 
+	/**
+	 * Checks if a specific discount is already applied to a product.
+	 *
+	 * @param productId  the ID of the product
+	 * @param discountId the ID of the discount
+	 * @return true if the discount is already applied to the product, false otherwise
+	 */
 	public boolean discountAlreadyAppliedToProduct(long productId, long discountId) {
 
 		List<ProductDiscount> productDiscount = findByProductId(productId);
@@ -77,6 +106,13 @@ public class ProductDiscountService {
 		return false;
 	}
 
+	/**
+	 * Adds a product discount by specifying the product and discount IDs.
+	 *
+	 * @param productId  the ID of the product
+	 * @param discountId the ID of the discount
+	 * @return true if the product discount is successfully added, false otherwise
+	 */
 	public boolean addProductDiscountByProductAndDiscount(long productId, long discountId) {
 
 		if (productService.productExist(productId)) {
@@ -100,6 +136,12 @@ public class ProductDiscountService {
 		return false;
 	}
 
+	/**
+	 * Adds a product discount.
+	 *
+	 * @param productDiscount the ProductDiscount to be added
+	 * @return true if the product discount is successfully added, false otherwise
+	 */
 	public boolean addProductDiscount(ProductDiscount productDiscount) {
 
 		long productId = productDiscount.getProduct().getProductId();
@@ -122,10 +164,22 @@ public class ProductDiscountService {
 		return false;
 	}
 
+	/**
+	 * Removes a product discount by its ID.
+	 *
+	 * @param productDiscountId the ID of the product discount to be removed
+	 */
 	public void removeProductDiscountByProductDiscountId(long productDiscountId) {
 		productDiscountRepo.deleteById(productDiscountId);
 	}
 
+	/**
+	 * Removes a product discount by specifying the product and discount IDs.
+	 *
+	 * @param productId  the ID of the product
+	 * @param discountId the ID of the discount
+	 * @return true if the product discount is successfully removed, false otherwise
+	 */
 	public boolean removeProductDiscountByProductIdAndDiscountId(long productId, long discountId) {
 
 		if (productService.productExist(productId)) {
@@ -146,12 +200,25 @@ public class ProductDiscountService {
 		return false;
 	}
 	
+	/**
+	 * Retrieves the discounts applied to a product.
+	 *
+	 * @param productId the ID of the product
+	 * @return a list of Discount objects applied to the product
+	 */
 	public List<Discount> findDiscountsByProductId(long productId){
 		
 		return productDiscountRepo.findDiscountsByProductId(productId);
 	}
 	
-	//returns the final price of the product with the quantity and discounts applied
+	/**
+	 * Calculates the final price of a product with the quantity and discounts applied.
+	 *
+	 * @param productUnitPrice the unit price of the product
+	 * @param discounts        a list of Discount objects applied to the product
+	 * @param quantity         the quantity of the product
+	 * @return the final price of the product with the discounts applied, or -1 if there are invalid inputs
+	 */
 	public double applyDiscounts(double productUnitPrice, List<Discount> discounts, int quantity) {
 		
 		if (discounts.isEmpty()) {
@@ -184,6 +251,13 @@ public class ProductDiscountService {
 		return discountedPrice;
 	}
 	
+	/**
+	 * Checks if a discount type is applied to a product.
+	 *
+	 * @param productId  the ID of the product
+	 * @param discountId the ID of the discount
+	 * @return true if the discount type is applied to the product, false otherwise
+	 */
 	public boolean discountTypeAppliedToProduct(long productId, long discountId) {
 		
 		List<Discount> discounts = findDiscountsByProductId(productId);

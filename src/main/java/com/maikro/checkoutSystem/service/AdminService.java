@@ -9,7 +9,7 @@ import com.maikro.checkoutSystem.model.Admin;
 import com.maikro.checkoutSystem.repository.AdminRepo;
 
 /**
- * Service class for managing admin-related operations.
+ * Service class for managing admin child class operations.
  */
 @Service
 public class AdminService {

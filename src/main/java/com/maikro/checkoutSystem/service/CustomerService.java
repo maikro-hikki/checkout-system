@@ -9,7 +9,7 @@ import com.maikro.checkoutSystem.model.Customer;
 import com.maikro.checkoutSystem.repository.CustomerRepo;
 
 /**
- * Service class for managing customer-related operations.
+ * Service class for managing customer child class operations.
  */
 @Service
 public class CustomerService {

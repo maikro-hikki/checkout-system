@@ -5,12 +5,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.maikro.checkoutSystem.Utility;
 import com.maikro.checkoutSystem.model.DiscountByProduct;
 import com.maikro.checkoutSystem.repository.DiscountByProductRepo;
 
 /**
- * Service class for managing discount type for individual product.
+ * Service class for managing discount type of individual product.
  */
 @Service
 public class DiscountByProductService {
