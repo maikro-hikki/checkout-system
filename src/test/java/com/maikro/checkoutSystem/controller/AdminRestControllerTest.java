@@ -11,10 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.annotation.DirtiesContext;
 
 import com.maikro.checkoutSystem.CheckoutSystemApplication;
+import com.maikro.checkoutSystem.constants.ProductType;
 import com.maikro.checkoutSystem.model.Admin;
+import com.maikro.checkoutSystem.model.Product;
 import com.maikro.checkoutSystem.model.UserClass;
 import com.maikro.checkoutSystem.repository.UserClassRepo;
 import com.maikro.checkoutSystem.service.UserClassService;
@@ -76,5 +77,20 @@ class AdminRestControllerTest {
 		given().contentType("application/json").body(admin).when().post("/api/v1/admin/register").then()
 				.statusCode(HttpStatus.BAD_REQUEST.value()).body("message", equalTo("[Field 'username': must not be blank]"));
 	}
+	
+	@Test
+	void testAddProductToShop_ForValidInputs_ShouldReturnCreatedHttpStatusAndAddToDatabase() {
 
+		Product product = new Product("Vacum ABC", 10.5, 50, ProductType.ELECTRONICS);
+
+		given().contentType("application/json")
+			.body(product)
+			.when()
+			.post("/api/v1/admin/1/product")
+			.then()
+				.statusCode(HttpStatus.CREATED.value())
+					.body("data.name", equalTo(product.getName()))
+					.body("data.unitPrice", equalTo(product.getUnitPrice()));
+
+	}
 }
