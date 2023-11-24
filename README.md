@@ -11,7 +11,7 @@
 - JUnit (for testing service methods)
 - Rest Assured (for testing Rest endpoints)
 ---
-### Features and Rest endpoints:
+### Rest endpoint features:
 - Adding admin/customer users
 - Adding/removing products into the system (admin feature only)
 - Adding/removing discounts (admin feature only)
