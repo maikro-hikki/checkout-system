@@ -98,71 +98,6 @@ public class CustomerRestController {
 		}
 	}
 
-//	@PostMapping("/register")
-//	public ResponseEntity<CustomResponse<Customer>> registerCustomer(@Valid @RequestBody Customer customer,
-//			BindingResult bindingResult) {
-//
-//		ResponseEntity<CustomResponse<Customer>> initialValidation = Utility.initialObjectValidator(customer, bindingResult);
-//
-//		if (initialValidation.hasBody()) {
-//
-//			return initialValidation;
-//		}
-//
-//		CustomResponse<Customer> customResponse = new CustomResponse<>();
-//		customResponse.setData(customer);
-//
-//		if (customer.getUserType() != UserType.CUSTOMER) {
-//
-//			customResponse.setMessage("Only Customer user type is accepted for registration in the Customer portal");
-//			return new ResponseEntity<>(customResponse, HttpStatus.BAD_REQUEST);
-//		}
-//		
-//		customer.setUserId(-1);
-//		System.out.println(customer.getUserId());
-//		
-//		System.out.println(userClassService.findByUserId(customer.getUserId()).isPresent());
-//
-//		if (userClassService.findByUserId(customer.getUserId()).isPresent()) {
-//			System.out.println("test");
-//			customResponse.setMessage("User ID already exists");
-//			return new ResponseEntity<>(customResponse, HttpStatus.CONFLICT);
-//		}
-//
-//		if (userClassService.usernameExist(customer.getUsername())) {
-//
-//			customResponse.setMessage("Username already exists");
-//			return new ResponseEntity<>(customResponse, HttpStatus.CONFLICT);
-//		}
-//		
-//		Customer updatedCustomer = new Customer(customer.getUsername(), customer.getPassword(), customer.getFirstName(), customer.getLastName());
-//		
-////		updatedCustomer.setFirstName(customer.getFirstName());
-////		updatedCustomer.setLastName(customer.getLastName());
-////		updatedCustomer.setPassword(customer.getPassword());
-////		updatedCustomer.setUsername(customer.getUsername());
-////		updatedCustomer.setUserType(customer.getUserType());
-//
-//		Customer savedCustomer = userClassService.addCustomerUser(updatedCustomer);
-//		System.out.println(updatedCustomer.getUserId());
-//
-//		if (savedCustomer == null) {
-//
-//			customResponse.setMessage("Error occured during registration");
-//			return new ResponseEntity<>(customResponse, HttpStatus.BAD_REQUEST);
-//		} else {
-//			
-//			customResponse.setData(savedCustomer);
-//
-//			URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-//					.buildAndExpand(savedCustomer.getUserId()).toUri();
-//
-//			customResponse.setMessage("Successfully added Customer user: " + savedCustomer.getFirstName() + " "
-//					+ savedCustomer.getLastName() + " (user ID: " + savedCustomer.getUserId() + ")");
-//			return ResponseEntity.created(location).body(customResponse);
-//		}
-//	}
-
 	@GetMapping("/all-products")
 	public ResponseEntity<Page<Product>> getProductByPage(@RequestParam int offset, @RequestParam int pageSize) {
 
@@ -206,11 +141,6 @@ public class CustomerRestController {
 		return new ResponseEntity<>(customResponse, HttpStatus.OK);
 
 	}
-
-//	@PostMapping("/{userId}/basket")
-//	public ResponseEntity<CustomResponse<Customer>> addProductToBasket(@PathVariable String userId, @RequestParam String productId, @RequestParam String quantity) {
-//		
-//	}
 
 	@PostMapping("/{userId}/add-to-basket")
 	public ResponseEntity<CustomResponse<Basket>> addProductToBasket(@PathVariable String userId,

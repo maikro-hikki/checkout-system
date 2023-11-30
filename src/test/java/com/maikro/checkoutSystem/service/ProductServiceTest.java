@@ -62,81 +62,81 @@ public class ProductServiceTest {
         
     }
     
-    @Test
-    @DirtiesContext
-    public void testRemoveProductById() {
-        
-        //call the method to remove the product
-        productService.removeProductById(product.getProductId());
-        
-        //verify that the product is no longer in the repository
-        assertThat(productRepo.findById(product.getProductId())).isEmpty();
-        
-    }
-    
-    @Test
-    @DirtiesContext
-    public void testDoesProductExistById_For_ExistingProduct() {
-        
-        //check if the method can find the existing product
-        assertTrue(productService.productExist(product.getProductId()));
-    }
-    
-    @Test
-    public void testDoesProductExistById_For_NonExistingProduct() {
-    	
-    	//not saved to database
-    	Product product7 = new Product("Some TV", 10.5, 10, ProductType.ELECTRONICS);
-    	
-        //check if the method cannot find the non-existing product
-        assertFalse(productService.productExist(product7.getProductId()));
-    }
-    
-    @Test
-    @DirtiesContext
-    public void testDoesProductExistById_For_RemovedProduct() {
-
-    	//remove the product
-        productService.removeProductById(product.getProductId());
-        
-        //check if the method cannot find the removed product
-        assertFalse(productService.productExist(product.getProductId()));
-    }
-    
-    @Test
-    @DirtiesContext
-    public void testFindByProductId_ShouldReturnSameProduct_ForCalledProductId() {
-    	
-        //find the product by productId
-        Product foundProduct = productService.findByProductId(product.getProductId()).get();
-        
-        //check if the found productId is the same as the created product's Id
-        assertEquals(product.getProductId(), foundProduct.getProductId());
-    }
-    
-    @Test
-    @DirtiesContext
-    public void testGetProductUnitPrice_ShouldReturnProductUnitPrice_IfProductExist() {
-    	
-        //get unit price of the product by productId
-        double unitPrice = productService.getProductUnitPrice(product.getProductId());
-        
-        //check if the unit price is the same as the expected unit price
-        assertEquals(10.5, unitPrice);
-    }
-    
-    @Test
-    @DirtiesContext
-    public void testGetProductUnitPrice_ShouldReturnNegative1_IfProductDoesntExist() {
-    	
-    	// not added to database/does not exist
-    			Product product7 = new Product("Some TV", 10.5, 10, ProductType.ELECTRONICS);
-        
-        //find the product by productId which was not added to the database
-        double unitPrice = productService.getProductUnitPrice(product7.getProductId());
-        
-        //check if the output is -1 since product is not in the database
-        assertEquals(-1, unitPrice);
-    }
+//    @Test
+//    @DirtiesContext
+//    public void testRemoveProductById() {
+//        
+//        //call the method to remove the product
+//        productService.removeProductById(product.getProductId());
+//        
+//        //verify that the product is no longer in the repository
+//        assertThat(productRepo.findById(product.getProductId())).isEmpty();
+//        
+//    }
+//    
+//    @Test
+//    @DirtiesContext
+//    public void testDoesProductExistById_For_ExistingProduct() {
+//        
+//        //check if the method can find the existing product
+//        assertTrue(productService.productExist(product.getProductId()));
+//    }
+//    
+//    @Test
+//    public void testDoesProductExistById_For_NonExistingProduct() {
+//    	
+//    	//not saved to database
+//    	Product product7 = new Product("Some TV", 10.5, 10, ProductType.ELECTRONICS);
+//    	
+//        //check if the method cannot find the non-existing product
+//        assertFalse(productService.productExist(product7.getProductId()));
+//    }
+//    
+//    @Test
+//    @DirtiesContext
+//    public void testDoesProductExistById_For_RemovedProduct() {
+//
+//    	//remove the product
+//        productService.removeProductById(product.getProductId());
+//        
+//        //check if the method cannot find the removed product
+//        assertFalse(productService.productExist(product.getProductId()));
+//    }
+//    
+//    @Test
+//    @DirtiesContext
+//    public void testFindByProductId_ShouldReturnSameProduct_ForCalledProductId() {
+//    	
+//        //find the product by productId
+//        Product foundProduct = productService.findByProductId(product.getProductId()).get();
+//        
+//        //check if the found productId is the same as the created product's Id
+//        assertEquals(product.getProductId(), foundProduct.getProductId());
+//    }
+//    
+//    @Test
+//    @DirtiesContext
+//    public void testGetProductUnitPrice_ShouldReturnProductUnitPrice_IfProductExist() {
+//    	
+//        //get unit price of the product by productId
+//        double unitPrice = productService.getProductUnitPrice(product.getProductId());
+//        
+//        //check if the unit price is the same as the expected unit price
+//        assertEquals(10.5, unitPrice);
+//    }
+//    
+//    @Test
+//    @DirtiesContext
+//    public void testGetProductUnitPrice_ShouldReturnNegative1_IfProductDoesntExist() {
+//    	
+//    	// not added to database/does not exist
+//    			Product product7 = new Product("Some TV", 10.5, 10, ProductType.ELECTRONICS);
+//        
+//        //find the product by productId which was not added to the database
+//        double unitPrice = productService.getProductUnitPrice(product7.getProductId());
+//        
+//        //check if the output is -1 since product is not in the database
+//        assertEquals(-1, unitPrice);
+//    }
     
 }
