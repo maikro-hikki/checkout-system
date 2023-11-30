@@ -1,4 +1,4 @@
-# Back-end system of a store with checkout-system
+# Back-end system of an electronics store with checkout-system
 ### Tech stack used:
 - Spring Boot
 - Rest API
