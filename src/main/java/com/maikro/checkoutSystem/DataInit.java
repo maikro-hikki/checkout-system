@@ -16,6 +16,7 @@ import com.maikro.checkoutSystem.service.DiscountService;
 import com.maikro.checkoutSystem.service.ProductService;
 import com.maikro.checkoutSystem.service.UserClassService;
 
+//Some dummy data that is put into the database for testing/experimenting purposes
 @Component
 public class DataInit implements ApplicationRunner {
 
