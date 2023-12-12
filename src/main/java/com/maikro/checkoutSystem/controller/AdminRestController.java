@@ -137,7 +137,7 @@ public class AdminRestController {
 		return new ResponseEntity<>(customResponse, HttpStatus.OK);
 
 	}
-
+////////////////////////////////continue from here//////////////////////////////////////
 	@PostMapping("/{userId}/discount-by-quantity")
 	public ResponseEntity<CustomResponse<DiscountByQuantity>> addDiscountByQuantity(
 			@Valid @RequestBody DiscountByQuantity discount, BindingResult bindingResult, @PathVariable long userId) {
