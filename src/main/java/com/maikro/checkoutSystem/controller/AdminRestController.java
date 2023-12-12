@@ -20,7 +20,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.maikro.checkoutSystem.Utility;
 import com.maikro.checkoutSystem.constants.CustomResponse;
 import com.maikro.checkoutSystem.constants.DiscountType;
-import com.maikro.checkoutSystem.constants.UserType;
 import com.maikro.checkoutSystem.model.Admin;
 import com.maikro.checkoutSystem.model.Discount;
 import com.maikro.checkoutSystem.model.DiscountByProduct;
@@ -32,6 +31,7 @@ import com.maikro.checkoutSystem.service.DiscountService;
 import com.maikro.checkoutSystem.service.ProductDiscountService;
 import com.maikro.checkoutSystem.service.ProductService;
 import com.maikro.checkoutSystem.service.UserClassService;
+import com.maikro.checkoutSystem.service.ValidationService;
 
 import jakarta.validation.Valid;
 
@@ -54,37 +54,23 @@ public class AdminRestController {
 	@Autowired
 	private ProductDiscountService productDiscountService;
 
+	@Autowired
+	private ValidationService validationService;
+
 	@PostMapping("/register")
 	public ResponseEntity<CustomResponse<Admin>> registerAdmin(@Valid @RequestBody Admin admin,
 			BindingResult bindingResult) {
 
-		ResponseEntity<CustomResponse<Admin>> initialValidation = Utility.initialObjectValidator(admin, bindingResult);
+		ResponseEntity<CustomResponse<Admin>> adminObjectValidation = validationService.parameterValidator(admin,
+				bindingResult);
 
-		if (initialValidation.hasBody()) {
+		if (adminObjectValidation.hasBody()) {
 
-			return initialValidation;
+			return adminObjectValidation;
 		}
 
 		CustomResponse<Admin> customResponse = new CustomResponse<>();
 		customResponse.setData(admin);
-
-		if (admin.getUserType() != UserType.ADMIN) {
-
-			customResponse.setMessage("Only Admin user type is accepted for registration in the Admin portal");
-			return new ResponseEntity<>(customResponse, HttpStatus.BAD_REQUEST);
-		}
-
-		if (userClassService.findByUserId(admin.getUserId()).isPresent()) {
-
-			customResponse.setMessage("User ID already exists");
-			return new ResponseEntity<>(customResponse, HttpStatus.CONFLICT);
-		}
-
-		if (userClassService.usernameExist(admin.getUsername())) {
-
-			customResponse.setMessage("Username already exists");
-			return new ResponseEntity<>(customResponse, HttpStatus.CONFLICT);
-		}
 
 		Admin savedAdmin = userClassService.addAdminUser(admin);
 
@@ -107,8 +93,8 @@ public class AdminRestController {
 	public ResponseEntity<CustomResponse<Product>> addProductToShop(@Valid @RequestBody Product product,
 			BindingResult bindingResult, @PathVariable("userId") long userId) {
 
-		ResponseEntity<CustomResponse<Product>> initialValidation = Utility.initialObjectValidator(product,
-				bindingResult);
+		ResponseEntity<CustomResponse<Product>> initialValidation = validationService.parameterValidator(product,
+				bindingResult, userId);
 
 		if (initialValidation.hasBody()) {
 
@@ -117,33 +103,6 @@ public class AdminRestController {
 
 		CustomResponse<Product> customResponse = new CustomResponse<>();
 		customResponse.setData(product);
-
-		if (!adminService.adminExist(userId)) {
-
-			customResponse.setMessage("User doesn't exist or does not have Admin privilages");
-			return new ResponseEntity<>(customResponse, HttpStatus.FORBIDDEN);
-		}
-
-		if (productService.productExist(product.getProductId())) {
-
-			customResponse.setMessage("Product ID already exists");
-			return new ResponseEntity<>(customResponse, HttpStatus.CONFLICT);
-		}
-
-		double unitPriceDouble = product.getUnitPrice();
-		int remainingQuantityInt = product.getRemainingQuantity();
-
-		if (unitPriceDouble < 0) {
-
-			customResponse.setMessage("Unit price have to be a number and not negative");
-			return new ResponseEntity<>(customResponse, HttpStatus.BAD_REQUEST);
-		}
-
-		if (remainingQuantityInt < 0 || (remainingQuantityInt % 1 != 0)) {
-
-			customResponse.setMessage("Quantity have to be an integer (number without decimals) and not negative");
-			return new ResponseEntity<>(customResponse, HttpStatus.BAD_REQUEST);
-		}
 
 		product.setAdmin(adminService.findByUserId(userId).get());
 
@@ -159,30 +118,17 @@ public class AdminRestController {
 
 	@DeleteMapping("/delete-product")
 	public ResponseEntity<CustomResponse<Product>> removeProductFromShop(@RequestParam String productId) {
+		
+		ResponseEntity<CustomResponse<Product>> initialValidation = validationService.parameterValidator(productId);
 
+		if (initialValidation.hasBody()) {
+
+			return initialValidation;
+		}
+		
 		CustomResponse<Product> customResponse = new CustomResponse<>();
-
-		if (productId.isEmpty()) {
-
-			customResponse.setMessage("Please fill out all fields");
-			return new ResponseEntity<>(customResponse, HttpStatus.BAD_REQUEST);
-		}
-
 		long productIdLong = Utility.convertStringToLong(productId);
-
-		if (productIdLong == Long.MIN_VALUE) {
-
-			customResponse.setMessage("Please input a valid product ID");
-			return new ResponseEntity<>(customResponse, HttpStatus.BAD_REQUEST);
-		}
-
 		Product foundProduct = productService.findByProductId(productIdLong).orElse(null);
-
-		if (foundProduct == null) {
-
-			customResponse.setMessage("Product not found");
-			return new ResponseEntity<>(customResponse, HttpStatus.NOT_FOUND);
-		}
 
 		customResponse.setData(foundProduct);
 		customResponse.setMessage("Product deleted successfully");
