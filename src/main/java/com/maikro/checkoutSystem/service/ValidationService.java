@@ -1,21 +1,26 @@
 package com.maikro.checkoutSystem.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.maikro.checkoutSystem.Utility;
 import com.maikro.checkoutSystem.constants.CustomResponse;
 import com.maikro.checkoutSystem.constants.DiscountType;
 import com.maikro.checkoutSystem.constants.UserType;
 import com.maikro.checkoutSystem.model.Admin;
+import com.maikro.checkoutSystem.model.Basket;
+import com.maikro.checkoutSystem.model.Customer;
 import com.maikro.checkoutSystem.model.Discount;
 import com.maikro.checkoutSystem.model.DiscountByProduct;
 import com.maikro.checkoutSystem.model.DiscountByQuantity;
 import com.maikro.checkoutSystem.model.Product;
 import com.maikro.checkoutSystem.model.ProductDiscount;
+import com.maikro.checkoutSystem.model.UserClass;
 
 @Service
 public class ValidationService {
@@ -28,12 +33,12 @@ public class ValidationService {
 
 	@Autowired
 	private ProductService productService;
+	
+	@Autowired
+	private CustomerService customerService;
 
 	@Autowired
 	private DiscountService discountService;
-
-	@Autowired
-	private ProductDiscountService productDiscountService;
 
 	public ResponseEntity<CustomResponse<Admin>> parameterValidator(Admin admin, BindingResult bindingResult) {
 
@@ -301,6 +306,116 @@ public class ValidationService {
 
 			customResponse.setMessage("Discount not found");
 			return new ResponseEntity<>(customResponse, HttpStatus.NOT_FOUND);
+		}
+
+		return ResponseEntity.noContent().build();
+	}
+
+	public ResponseEntity<CustomResponse<Customer>> parameterValidator(Customer customer, BindingResult bindingResult) {
+
+		ResponseEntity<CustomResponse<Customer>> initialValidation = Utility.initialObjectValidator(customer,
+				bindingResult);
+
+		if (initialValidation.hasBody()) {
+
+			return initialValidation;
+		}
+
+		CustomResponse<Customer> customResponse = new CustomResponse<>();
+		customResponse.setData(customer);
+
+		if (customer.getUserType() != UserType.CUSTOMER) {
+
+			customResponse.setMessage("Only Customer user type is accepted for registration in the Customer portal");
+			return new ResponseEntity<>(customResponse, HttpStatus.BAD_REQUEST);
+		}
+
+		if (userClassService.findByUserId(customer.getUserId()).isPresent()) {
+
+			customResponse.setMessage("User ID already exists");
+			return new ResponseEntity<>(customResponse, HttpStatus.CONFLICT);
+		}
+
+		if (userClassService.usernameExist(customer.getUsername())) {
+
+			customResponse.setMessage("Username already exists");
+			return new ResponseEntity<>(customResponse, HttpStatus.CONFLICT);
+		}
+
+		return ResponseEntity.noContent().build();
+	}
+
+	public ResponseEntity<CustomResponse<Page<Basket>>> parameterValidator(String userId, int offset, int pageSize) {
+
+		CustomResponse<Page<Basket>> customResponse = new CustomResponse<>();
+
+		long userIdLong = Utility.convertStringToLong(userId);
+
+		if (userIdLong == Long.MIN_VALUE) {
+
+			customResponse.setMessage("Invalid user ID");
+			return new ResponseEntity<>(customResponse, HttpStatus.BAD_REQUEST);
+		}
+
+		UserClass user = userClassService.findByUserId(userIdLong).orElse(null);
+
+		if (user == null) {
+
+			customResponse.setMessage("User doesn't exist");
+			return new ResponseEntity<>(customResponse, HttpStatus.FORBIDDEN);
+		}
+		
+		return ResponseEntity.noContent().build();
+	}
+	
+	public ResponseEntity<CustomResponse<Basket>> parameterValidator(String userId, String productId, String quantity) {
+		
+		CustomResponse<Basket> customResponse = new CustomResponse<>();
+
+		long userIdLong = Utility.convertStringToLong(userId);
+
+		if (userIdLong == Long.MIN_VALUE) {
+
+			customResponse.setMessage("Invalid user ID");
+			return new ResponseEntity<>(customResponse, HttpStatus.BAD_REQUEST);
+		}
+
+		if (!userClassService.isCustomer(userIdLong)) {
+
+			customResponse.setMessage("Customer user doesn't exist");
+			return new ResponseEntity<>(customResponse, HttpStatus.BAD_REQUEST);
+		}
+
+		long productIdLong = Utility.convertStringToLong(productId);
+
+		if (productIdLong == Long.MIN_VALUE) {
+
+			customResponse.setMessage("Invalid product ID");
+			return new ResponseEntity<>(customResponse, HttpStatus.BAD_REQUEST);
+		}
+
+		int quantityInt = Utility.convertStringToInt(quantity);
+
+		if (quantityInt == Integer.MIN_VALUE || quantityInt < 0 || (quantityInt % 1 != 0)) {
+
+			customResponse.setMessage("Quantity have to be an integer (number without decimals) and not negative");
+			return new ResponseEntity<>(customResponse, HttpStatus.BAD_REQUEST);
+		}
+
+		Customer customer = customerService.findByUserId(userIdLong).orElse(null);
+
+		if (customer == null) {
+
+			customResponse.setMessage("User doesn't exist");
+			return new ResponseEntity<>(customResponse, HttpStatus.BAD_REQUEST);
+		}
+
+		Product product = productService.findByProductId(productIdLong).orElse(null);
+
+		if (product == null) {
+
+			customResponse.setMessage("Product doesn't exist");
+			return new ResponseEntity<>(customResponse, HttpStatus.BAD_REQUEST);
 		}
 		
 		return ResponseEntity.noContent().build();
