@@ -1,12 +1,8 @@
 package com.maikro.checkoutSystem.model;
 
-import java.util.List;
-
 import com.maikro.checkoutSystem.constants.UserType;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 
 @Entity

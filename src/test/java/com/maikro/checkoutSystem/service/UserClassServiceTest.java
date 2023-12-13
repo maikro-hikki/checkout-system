@@ -5,18 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.maikro.checkoutSystem.constants.ProductType;
-import com.maikro.checkoutSystem.constants.UserType;
 import com.maikro.checkoutSystem.model.Admin;
 import com.maikro.checkoutSystem.model.Customer;
-import com.maikro.checkoutSystem.model.DiscountByProduct;
-import com.maikro.checkoutSystem.model.DiscountByQuantity;
-import com.maikro.checkoutSystem.model.Product;
 import com.maikro.checkoutSystem.model.UserClass;
 import com.maikro.checkoutSystem.repository.UserClassRepo;
 

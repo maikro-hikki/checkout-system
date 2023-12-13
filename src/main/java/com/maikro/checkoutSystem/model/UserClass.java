@@ -10,7 +10,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
-import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity

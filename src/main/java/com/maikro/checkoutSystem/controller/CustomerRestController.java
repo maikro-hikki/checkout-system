@@ -23,9 +23,7 @@ import com.maikro.checkoutSystem.constants.CustomResponse;
 import com.maikro.checkoutSystem.model.Basket;
 import com.maikro.checkoutSystem.model.Customer;
 import com.maikro.checkoutSystem.model.Product;
-import com.maikro.checkoutSystem.model.UserClass;
 import com.maikro.checkoutSystem.service.BasketService;
-import com.maikro.checkoutSystem.service.CustomerService;
 import com.maikro.checkoutSystem.service.ProductService;
 import com.maikro.checkoutSystem.service.UserClassService;
 import com.maikro.checkoutSystem.service.ValidationService;
@@ -35,9 +33,6 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/v1/customer")
 public class CustomerRestController {
-
-	@Autowired
-	private CustomerService customerService;
 
 	@Autowired
 	private UserClassService userClassService;

@@ -8,13 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 
-import com.maikro.checkoutSystem.constants.ProductType;
 import com.maikro.checkoutSystem.model.Admin;
-import com.maikro.checkoutSystem.model.Customer;
 import com.maikro.checkoutSystem.model.Discount;
 import com.maikro.checkoutSystem.model.DiscountByProduct;
 import com.maikro.checkoutSystem.model.DiscountByQuantity;
-import com.maikro.checkoutSystem.model.Product;
 import com.maikro.checkoutSystem.repository.DiscountRepo;
 
 @SpringBootTest

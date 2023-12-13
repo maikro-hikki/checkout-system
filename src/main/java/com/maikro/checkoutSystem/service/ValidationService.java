@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.maikro.checkoutSystem.Utility;
 import com.maikro.checkoutSystem.constants.CustomResponse;
@@ -39,9 +38,6 @@ public class ValidationService {
 
 	@Autowired
 	private DiscountService discountService;
-	
-	@Autowired
-	private BasketService basketService;
 
 	public ResponseEntity<CustomResponse<Admin>> parameterValidator(Admin admin, BindingResult bindingResult) {
 
