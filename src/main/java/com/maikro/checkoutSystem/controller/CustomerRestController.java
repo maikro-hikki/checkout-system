@@ -195,25 +195,20 @@ public class CustomerRestController {
 		return new ResponseEntity<>(customResponse, HttpStatus.OK);
 	}
 
-	@PutMapping("/{userId}/check-out")
+	@PutMapping("/{userId}/checkout")
 	public ResponseEntity<CustomResponse<Double>> basketCheckOut(@PathVariable String userId) {
+		
+		ResponseEntity<CustomResponse<Double>> initialValidation = validationService.parameterValidator(userId);
+
+		if (initialValidation.hasBody()) {
+
+			return initialValidation;
+		}
 
 		CustomResponse<Double> customResponse = new CustomResponse<>();
-
+		
 		long userIdLong = Utility.convertStringToLong(userId);
-
-		if (userIdLong == Long.MIN_VALUE) {
-
-			customResponse.setMessage("Invalid user ID");
-			return new ResponseEntity<>(customResponse, HttpStatus.BAD_REQUEST);
-		}
-
-		if (!userClassService.isCustomer(userIdLong)) {
-
-			customResponse.setMessage("Customer user doesn't exist");
-			return new ResponseEntity<>(customResponse, HttpStatus.BAD_REQUEST);
-		}
-
+		
 		double totalCost = basketService.totalCostInBasket(userIdLong);
 
 		int deductionProcess = basketService.deductRemainingQuantityAfterPurchase(userIdLong);

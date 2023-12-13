@@ -65,7 +65,7 @@ public class DataInit implements ApplicationRunner {
 
 			productService.addNewProduct(product);
 			
-			basketService.addProductToBasket(customer1.getUserId(), product.getProductId(), 50);
+//			basketService.addProductToBasket(customer1.getUserId(), product.getProductId(), 50);
 		}
 
 	}
