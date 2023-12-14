@@ -81,7 +81,7 @@ public class CustomerRestController {
 	}
 
 	@GetMapping("/all-products")
-	public ResponseEntity<Page<Product>> getProductByPage(@RequestParam int offset, @RequestParam int pageSize) {
+	public ResponseEntity<Page<Product>> getAllProductByPage(@RequestParam int offset, @RequestParam int pageSize) {
 
 		Page<Product> allProducts = productService.findAllProductWithPagination(offset, pageSize);
 
@@ -89,7 +89,7 @@ public class CustomerRestController {
 	}
 
 	@GetMapping("/{userId}/basket")
-	public ResponseEntity<CustomResponse<Page<Basket>>> showBasket(@PathVariable String userId,
+	public ResponseEntity<CustomResponse<Page<Basket>>> getBasketByPage(@PathVariable String userId,
 			@RequestParam int offset, @RequestParam int pageSize) {
 
 		ResponseEntity<CustomResponse<Page<Basket>>> initialValidation = validationService.parameterValidator(userId,

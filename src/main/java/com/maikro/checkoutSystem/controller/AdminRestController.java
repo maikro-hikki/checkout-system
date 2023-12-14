@@ -292,7 +292,7 @@ public class AdminRestController {
 	}
 
 	@GetMapping("/all-products")
-	public ResponseEntity<Page<Product>> getProductByPage(@RequestParam int offset, @RequestParam int pageSize) {
+	public ResponseEntity<Page<Product>> getAllProductByPage(@RequestParam int offset, @RequestParam int pageSize) {
 
 		Page<Product> allProducts = productService.findAllProductWithPagination(offset, pageSize);
 
