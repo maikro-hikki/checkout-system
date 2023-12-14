@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.maikro.checkoutSystem.constants.UserType;
 import com.maikro.checkoutSystem.model.Admin;
@@ -24,20 +25,22 @@ public class UserClassService {
 	 * Retrieves a user class by its user ID.
 	 *
 	 * @param userId the ID of the user class
-	 * @return an Optional containing the UserClass if found, or an empty Optional if not found
+	 * @return an Optional containing the UserClass if found, or an empty Optional
+	 *         if not found
 	 */
 	public Optional<UserClass> findByUserId(long userId) {
 		return userClassRepo.findById(userId);
 	}
-	
+
 	/**
 	 * Retrieves a user class by its username.
 	 *
 	 * @param username the username of the user class
-	 * @return an Optional containing the UserClass if found, or an empty Optional if not found
+	 * @return an Optional containing the UserClass if found, or an empty Optional
+	 *         if not found
 	 */
-	public Optional<UserClass> findByUsername(String username){
-		
+	public Optional<UserClass> findByUsername(String username) {
+
 		return userClassRepo.findByUsername(username);
 	}
 
@@ -64,7 +67,7 @@ public class UserClassService {
 	 * @return the added Customer user, or null if the user already exists
 	 */
 	public Customer addCustomerUser(Customer customer) {
-		
+
 		if (findByUserId(customer.getUserId()).isPresent() || usernameExist(customer.getUsername())) {
 
 			return null;
@@ -88,7 +91,7 @@ public class UserClassService {
 
 			return null;
 		}
-		
+
 		Admin admin = new Admin(username, password, firstName, lastName);
 
 		return userClassRepo.save(admin);
@@ -103,13 +106,14 @@ public class UserClassService {
 	 * @param lastName  the last name of the customer user
 	 * @return the added Customer user, or null if the user already exists
 	 */
+//	@Transactional * @Transactional This method is executed within a transaction
 	public Customer addCustomerUser(String username, String password, String firstName, String lastName) {
 
 		if (usernameExist(username)) {
 
 			return null;
 		}
-		
+
 		Customer customer = new Customer(username, password, firstName, lastName);
 
 		return userClassRepo.save(customer);

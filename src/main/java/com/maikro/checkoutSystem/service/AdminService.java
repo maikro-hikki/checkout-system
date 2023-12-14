@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.maikro.checkoutSystem.model.Admin;
 import com.maikro.checkoutSystem.repository.AdminRepo;
@@ -32,7 +33,7 @@ public class AdminService {
      *
      * @param admin the admin to be added
      * @return the added Admin object
-     */
+	 */
 	public Admin addAdminUser(Admin admin) {
 		return adminRepo.save(admin);
 	}

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +32,7 @@ import com.maikro.checkoutSystem.service.ValidationService;
 import jakarta.validation.Valid;
 
 @RestController
+@EnableTransactionManagement
 @RequestMapping("/api/v1/customer")
 public class CustomerRestController {
 
@@ -87,7 +89,7 @@ public class CustomerRestController {
 	}
 
 	@GetMapping("/{userId}/basket")
-	public ResponseEntity<CustomResponse<Page<Basket>>> addProductToBasket(@PathVariable String userId,
+	public ResponseEntity<CustomResponse<Page<Basket>>> showBasket(@PathVariable String userId,
 			@RequestParam int offset, @RequestParam int pageSize) {
 
 		ResponseEntity<CustomResponse<Page<Basket>>> initialValidation = validationService.parameterValidator(userId,
