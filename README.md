@@ -2,11 +2,12 @@
 ### Tech stack used:
 - Spring Boot
 - Rest API
-- H2 in-memory Database
+- H2 in-memory Database (for demonstration purpose)
 ---
 ### Testing tech stack used:
 - JUnit (for testing service methods)
 - Rest Assured (for testing Rest endpoints)
+- Dummy data is added when the application is started for testing purposes, which is located in [DataInit](src/main/java/com/maikro/checkoutSystem/DataInit.java). Can be modified/removed by modifying/deleting said file
 ---
 ### Quick start:
 - To start the program, go into the project folder and use the command line `mvn spring-boot:run`
