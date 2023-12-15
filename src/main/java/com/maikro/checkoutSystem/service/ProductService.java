@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.maikro.checkoutSystem.constants.ProductType;
 import com.maikro.checkoutSystem.model.Product;
@@ -27,7 +28,9 @@ public class ProductService {
 	 * Adds a new product.
 	 *
 	 * @param product the product to be added
+	 * @Transactional This method is executed within a transaction
 	 */
+	@Transactional
 	public void addNewProduct(Product product) {
 		productRepo.save(product);
 	}
@@ -36,7 +39,9 @@ public class ProductService {
 	 * Removes a product by its ID.
 	 *
 	 * @param productId the ID of the product to be removed
+	* @Transactional This method is executed within a transaction
 	 */
+	@Transactional
 	public void removeProductById(long productId) {
 		productRepo.deleteById(productId);
 	}

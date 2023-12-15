@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.maikro.checkoutSystem.Utility;
 import com.maikro.checkoutSystem.model.Basket;
@@ -80,7 +81,9 @@ public class BasketService {
 	 *
 	 * @param basket the basket to be added
 	 * @return the added Basket
+	 * @Transactional This method is executed within a transaction
 	 */
+	@Transactional
 	public Basket addBasket(Basket basket) {
 
 		return basketRepo.save(basket);
@@ -94,7 +97,9 @@ public class BasketService {
 	 * @param quantity  the quantity of the product to add
 	 * @return true if the product was successfully added to the basket, false
 	 *         otherwise
+	 * @Transactional This method is executed within a transaction
 	 */
+	@Transactional
 	public Basket addProductToBasket(long userId, long productId, int quantity) {
 
 		if (customerService.customerExist(userId)) {
@@ -133,7 +138,9 @@ public class BasketService {
 	 * @param quantity  the quantity of the product to remove
 	 * @return true if the product was successfully removed from the basket, false
 	 *         otherwise
+	 * @Transactional This method is executed within a transaction
 	 */
+	@Transactional
 	public boolean removeProductFromBasket(long userId, long productId, int quantity) {
 
 		if (customerService.customerExist(userId)) {
@@ -234,7 +241,9 @@ public class BasketService {
 	 * @param userId the ID of the user
 	 * @return 1 if the remaining quantity was successfully deducted, -1 if there
 	 *         was an error
+	 * @Transactional This method is executed within a transaction
 	 */
+	@Transactional
 	public int deductRemainingQuantityAfterPurchase(long userId) {
 
 		List<Basket> checkout = findByUserId(userId);

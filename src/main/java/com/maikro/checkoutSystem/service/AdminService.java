@@ -33,7 +33,9 @@ public class AdminService {
      *
      * @param admin the admin to be added
      * @return the added Admin object
+	 * @Transactional This method is executed within a transaction
 	 */
+	@Transactional
 	public Admin addAdminUser(Admin admin) {
 		return adminRepo.save(admin);
 	}

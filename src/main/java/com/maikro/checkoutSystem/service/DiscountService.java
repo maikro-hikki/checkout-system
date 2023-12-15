@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.maikro.checkoutSystem.model.Discount;
 import com.maikro.checkoutSystem.model.DiscountByProduct;
@@ -43,7 +44,9 @@ public class DiscountService {
 	 * Adds a discount of type DiscountByQuantity.
 	 *
 	 * @param discount the DiscountByQuantity to be added
+	 * @Transactional This method is executed within a transaction
 	 */
+	@Transactional
 	public void addDiscountByQuantity(DiscountByQuantity discount) {
 		discountRepo.save(discount);
 	}
@@ -52,7 +55,9 @@ public class DiscountService {
 	 * Adds a discount of type DiscountByProduct.
 	 *
 	 * @param discount the DiscountByProduct to be added
+	 * @Transactional This method is executed within a transaction
 	 */
+	@Transactional
 	public void addDiscountByProduct(DiscountByProduct discount) {
 		discountRepo.save(discount);
 	}
@@ -61,7 +66,9 @@ public class DiscountService {
 	 * Removes a discount by its ID.
 	 *
 	 * @param discountId the ID of the discount to be removed
+	 * @Transactional This method is executed within a transaction
 	 */
+	@Transactional
 	public void removeDiscountById(long discountId) {
 		discountRepo.deleteById(discountId);
 	}

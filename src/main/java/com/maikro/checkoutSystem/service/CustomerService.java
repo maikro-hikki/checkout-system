@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.maikro.checkoutSystem.model.Customer;
 import com.maikro.checkoutSystem.repository.CustomerRepo;
@@ -32,7 +33,9 @@ public class CustomerService {
 	 *
 	 * @param customer the customer to be added
 	 * @return the added Customer
+	 * @Transactional This method is executed within a transaction
 	 */
+	@Transactional
 	public Customer addCustomerUser(Customer customer) {
 		return customerRepo.save(customer);
 	}

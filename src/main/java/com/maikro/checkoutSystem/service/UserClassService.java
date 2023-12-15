@@ -49,7 +49,9 @@ public class UserClassService {
 	 *
 	 * @param admin the admin user to be added
 	 * @return the added Admin user, or null if the user already exists
+	 * @Transactional This method is executed within a transaction
 	 */
+	@Transactional
 	public Admin addAdminUser(Admin admin) {
 
 		if (findByUserId(admin.getUserId()).isPresent() || usernameExist(admin.getUsername())) {
@@ -65,7 +67,9 @@ public class UserClassService {
 	 *
 	 * @param customer the customer user to be added
 	 * @return the added Customer user, or null if the user already exists
+	 * @Transactional This method is executed within a transaction
 	 */
+	@Transactional
 	public Customer addCustomerUser(Customer customer) {
 
 		if (findByUserId(customer.getUserId()).isPresent() || usernameExist(customer.getUsername())) {
@@ -84,7 +88,9 @@ public class UserClassService {
 	 * @param firstName the first name of the admin user
 	 * @param lastName  the last name of the admin user
 	 * @return the added Admin user, or null if the user already exists
+	 * @Transactional This method is executed within a transaction
 	 */
+	@Transactional
 	public Admin addAdminUser(String username, String password, String firstName, String lastName) {
 
 		if (usernameExist(username)) {
@@ -105,8 +111,9 @@ public class UserClassService {
 	 * @param firstName the first name of the customer user
 	 * @param lastName  the last name of the customer user
 	 * @return the added Customer user, or null if the user already exists
+	 * @Transactional This method is executed within a transaction
 	 */
-//	@Transactional * @Transactional This method is executed within a transaction
+	@Transactional
 	public Customer addCustomerUser(String username, String password, String firstName, String lastName) {
 
 		if (usernameExist(username)) {
@@ -124,7 +131,9 @@ public class UserClassService {
 	 *
 	 * @param userId the ID of the user to be removed
 	 * @return 1 if the user is removed, -1 if the user is not found
+	 * @Transactional This method is executed within a transaction
 	 */
+	@Transactional
 	public int removeUserById(long userId) {
 
 		if (findByUserId(userId).isPresent()) {

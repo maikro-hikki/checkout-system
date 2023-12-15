@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.maikro.checkoutSystem.constants.DiscountType;
 import com.maikro.checkoutSystem.model.Discount;
@@ -112,7 +113,9 @@ public class ProductDiscountService {
 	 * @param productId  the ID of the product
 	 * @param discountId the ID of the discount
 	 * @return true if the product discount is successfully added, false otherwise
+	 * @Transactional This method is executed within a transaction
 	 */
+	@Transactional
 	public boolean addProductDiscountByProductAndDiscount(long productId, long discountId) {
 
 		if (productService.productExist(productId)) {
@@ -141,7 +144,9 @@ public class ProductDiscountService {
 	 *
 	 * @param productDiscount the ProductDiscount to be added
 	 * @return true if the product discount is successfully added, false otherwise
+	 * @Transactional This method is executed within a transaction
 	 */
+	@Transactional
 	public boolean addProductDiscount(ProductDiscount productDiscount) {
 
 		long productId = productDiscount.getProduct().getProductId();
@@ -168,7 +173,9 @@ public class ProductDiscountService {
 	 * Removes a product discount by its ID.
 	 *
 	 * @param productDiscountId the ID of the product discount to be removed
+	 * @Transactional This method is executed within a transaction
 	 */
+	@Transactional
 	public void removeProductDiscountByProductDiscountId(long productDiscountId) {
 		productDiscountRepo.deleteById(productDiscountId);
 	}
@@ -179,7 +186,9 @@ public class ProductDiscountService {
 	 * @param productId  the ID of the product
 	 * @param discountId the ID of the discount
 	 * @return true if the product discount is successfully removed, false otherwise
+	 * @Transactional This method is executed within a transaction
 	 */
+	@Transactional
 	public boolean removeProductDiscountByProductIdAndDiscountId(long productId, long discountId) {
 
 		if (productService.productExist(productId)) {
