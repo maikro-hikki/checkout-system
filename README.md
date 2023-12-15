@@ -17,7 +17,7 @@
 - Adding admin/customer users
 - Adding/removing products into the system (admin feature only)
 - Adding/removing discounts (admin feature only)
-- Adding/removing discounts to on products (admin feature only)
+- Adding/removing discounts to products (admin feature only)
 - Adding/removing products to shopping basket (customer feature only)
 - Checkout and get total price in basket (customer feature only)
 - Pagination implemented on any lists received (such as for getting all products in basket or in general)
